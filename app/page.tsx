@@ -19,7 +19,6 @@ import { Button } from "@/components/ui/button"
 import { ContactForm } from "@/components/contact-form"
 import { HeroPhone } from "@/components/hero-phone"
 import { FloatingNav } from "@/components/floating-nav"
-import { MouseFollower } from "@/components/mouse-follower"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { SectionHeading } from "@/components/section-heading"
@@ -143,9 +142,8 @@ const works = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-white overflow-hidden">
+    <div className="min-h-screen bg-white text-slate-800 overflow-hidden">
       <SmoothScroll />
-      <MouseFollower />
       <ScrollProgress />
       <FloatingNav />
 
@@ -153,12 +151,7 @@ export default function Home() {
       <HeroPhone />
 
       {/* About */}
-      <section id="about" className="py-28 md:py-32 relative">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-10" />
-          <div className="absolute bottom-1/3 left-1/3 w-64 h-64 bg-cyan-500 rounded-full mix-blend-screen filter blur-3xl opacity-10" />
-        </div>
-
+      <section id="about" className="py-28 md:py-36 relative bg-white">
         <div className="container relative z-10">
           <SectionHeading
             title="About"
@@ -166,50 +159,48 @@ export default function Home() {
           />
 
           {/* Team roles */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20">
             {teamRoles.map((t) => (
               <div
                 key={t.role}
-                className="rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-blue-400/15 p-8 text-center"
+                className="rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-8 text-center"
               >
-                <div className="mx-auto w-14 h-14 rounded-xl bg-gradient-to-tr from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-900/40">
+                <div className="mx-auto w-14 h-14 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
                   <t.icon className="h-7 w-7 text-white" />
                 </div>
-                <h3 className="font-display mt-5 text-xl font-bold text-white">{t.role}</h3>
-                <p className="mt-3 text-sm text-blue-100/70 leading-relaxed">{t.desc}</p>
+                <h3 className="font-display mt-5 text-xl font-semibold text-slate-900">{t.role}</h3>
+                <p className="mt-3 text-sm text-slate-500 leading-loose">{t.desc}</p>
               </div>
             ))}
           </div>
 
           {/* Representative profile + message */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch mt-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch mt-24">
             <div className="relative">
-              <div className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-blue-500/20 to-cyan-500/20 blur-xl opacity-70" />
-              <div className="relative h-full rounded-2xl overflow-hidden border border-blue-400/15">
+              <div className="relative h-full rounded-2xl overflow-hidden shadow-lg shadow-blue-500/10">
                 <img
                   src="/about/team.png"
                   alt="ウェブデザイン鹿児島のチーム"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
               </div>
             </div>
 
             <div className="flex flex-col gap-6">
-              <div className="rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-blue-400/15 p-8">
-                <span className="text-xs font-medium tracking-widest text-cyan-400">PROFILE</span>
-                <h3 className="font-display mt-2 text-2xl font-bold text-white">代表 ○○</h3>
-                <p className="mt-4 text-sm text-blue-100/80 leading-relaxed">
+              <div className="rounded-2xl bg-slate-50 border border-slate-200 p-8">
+                <span className="text-xs font-medium tracking-[0.2em] text-blue-600">PROFILE</span>
+                <h3 className="font-display mt-2 text-2xl font-semibold text-slate-900">代表 ○○</h3>
+                <p className="mt-4 text-sm text-slate-600 leading-loose">
                   鹿児島県を拠点に活動するデザイナー / クリエイティブディレクター。広告代理店とデジタルマーケティング会社にて約8年間、Webデザインや広告クリエイティブ制作に従事し、2019年に「ウェブデザイン鹿児島」を開業。現在は地元企業をはじめ、全国の企業に向けてWeb制作、クリエイティブ制作、広告運用、採用支援まで幅広く支援しています。
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-blue-400/15 p-8">
-                <span className="text-xs font-medium tracking-widest text-cyan-400">MESSAGE</span>
-                <p className="mt-4 text-sm text-blue-100/80 leading-relaxed">
+              <div className="rounded-2xl bg-slate-50 border border-slate-200 p-8">
+                <span className="text-xs font-medium tracking-[0.2em] text-blue-600">MESSAGE</span>
+                <p className="mt-4 text-sm text-slate-600 leading-loose">
                   Webサイトや広告、SNS運用は、それぞれを単体で考えるのではなく、事業全体の課題や目的に合わせて設計することが大切だと考えています。私たちは、見た目を整えるだけの制作ではなく、その先の集客・採用・売上につながる仕組みづくりまで見据えた支援を行っています。
                 </p>
-                <p className="mt-4 text-sm text-blue-100/80 leading-relaxed">
+                <p className="mt-4 text-sm text-slate-600 leading-loose">
                   課題の段階から一緒に整理し、必要な施策をチームで一貫してご提案できるのが私たちの強みです。地域企業のパートナーとして、そして全国の企業のデジタル支援役として、成果につながる伴走をしていきます。
                 </p>
               </div>
@@ -217,42 +208,42 @@ export default function Home() {
           </div>
 
           {/* Strength */}
-          <div className="mt-20">
-            <h3 className="font-display text-center text-2xl font-bold text-white">Strength</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+          <div className="mt-24">
+            <h3 className="font-display text-center text-2xl font-semibold text-slate-900 tracking-wide">Strength</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
               {strengths.map((s) => (
                 <div
                   key={s.title}
-                  className="rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-blue-400/15 p-8"
+                  className="rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-8"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-blue-400/20 flex items-center justify-center">
-                    <s.icon className="h-6 w-6 text-cyan-400" />
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center">
+                    <s.icon className="h-6 w-6 text-blue-600" />
                   </div>
-                  <h4 className="font-display mt-5 text-lg font-bold text-white leading-snug text-balance">
+                  <h4 className="font-display mt-5 text-lg font-semibold text-slate-900 leading-snug text-balance">
                     {s.title}
                   </h4>
-                  <p className="mt-3 text-sm text-blue-100/70 leading-relaxed">{s.desc}</p>
+                  <p className="mt-3 text-sm text-slate-500 leading-loose">{s.desc}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Numbers */}
-          <div className="mt-20">
-            <h3 className="font-display text-center text-2xl font-bold text-white">Numbers</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+          <div className="mt-24">
+            <h3 className="font-display text-center text-2xl font-semibold text-slate-900 tracking-wide">Numbers</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
               {numbers.map((n) => (
                 <div
                   key={n.label}
-                  className="rounded-2xl bg-gradient-to-b from-blue-500/10 to-transparent border border-blue-400/15 p-8 text-center"
+                  className="rounded-2xl bg-gradient-to-b from-blue-50 to-white border border-slate-200 p-8 text-center"
                 >
                   <div className="font-display flex items-end justify-center gap-1">
-                    <span className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-cyan-300">
+                    <span className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-sky-400">
                       {n.value}
                     </span>
-                    <span className="text-lg font-bold text-blue-200 pb-1">{n.unit}</span>
+                    <span className="text-lg font-semibold text-blue-500 pb-1">{n.unit}</span>
                   </div>
-                  <p className="mt-3 text-sm text-blue-100/70">{n.label}</p>
+                  <p className="mt-3 text-sm text-slate-500">{n.label}</p>
                 </div>
               ))}
             </div>
@@ -261,19 +252,14 @@ export default function Home() {
       </section>
 
       {/* Service */}
-      <section id="service" className="py-28 md:py-32 relative">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-sky-500 rounded-full mix-blend-screen filter blur-3xl opacity-10" />
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-10" />
-        </div>
-
+      <section id="service" className="py-28 md:py-36 relative bg-slate-50">
         <div className="container relative z-10">
           <SectionHeading
             title="Service"
             subtitle="Web制作を中心に、集客支援・採用支援まで幅広く対応。必要な領域だけのご依頼はもちろん、企画から制作・運用までまとめてご相談いただくことも可能です。"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20">
             {services.map((s, i) => (
               <ServiceCard key={s.title} {...s} index={i} />
             ))}
@@ -282,30 +268,25 @@ export default function Home() {
       </section>
 
       {/* Works */}
-      <section id="works" className="py-28 md:py-32 relative">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/4 left-1/3 w-64 h-64 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-10" />
-          <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-cyan-500 rounded-full mix-blend-screen filter blur-3xl opacity-10" />
-        </div>
-
+      <section id="works" className="py-28 md:py-36 relative bg-white">
         <div className="container relative z-10">
           <SectionHeading
             title="Works"
             subtitle="制作実績だけでなく、改善・運用を含めた支援事例も掲載しています。"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-20">
             {works.map((w, i) => (
               <WorkCard key={w.title} {...w} index={i} />
             ))}
           </div>
 
-          <div className="flex justify-center mt-12">
+          <div className="flex justify-center mt-14">
             <Button
               asChild
               size="lg"
               variant="outline"
-              className="group border-blue-400/40 text-blue-200 hover:text-white hover:border-blue-300 bg-transparent"
+              className="group rounded-full border-blue-200 text-blue-600 hover:text-blue-700 hover:border-blue-400 hover:bg-blue-50 bg-transparent px-8"
             >
               <Link href="#works">
                 実績をもっと見る
@@ -317,37 +298,32 @@ export default function Home() {
       </section>
 
       {/* Contact */}
-      <section id="contact" className="py-28 md:py-32 relative">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-10" />
-          <div className="absolute bottom-1/3 right-1/3 w-64 h-64 bg-cyan-500 rounded-full mix-blend-screen filter blur-3xl opacity-10" />
-        </div>
-
+      <section id="contact" className="py-28 md:py-36 relative bg-slate-50">
         <div className="container relative z-10">
           <SectionHeading title="Contact" subtitle="お気軽にご相談ください" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start mt-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start mt-20">
             <div className="space-y-6">
-              <p className="text-base text-blue-100/80 leading-relaxed">
+              <p className="text-base text-slate-600 leading-loose">
                 Web制作、集客改善、採用支援に関するご相談を承っております。サイト制作のみのご相談はもちろん、広告や導線改善、採用支援まで含めたご相談も可能です。
               </p>
-              <p className="text-base text-blue-100/80 leading-relaxed">
+              <p className="text-base text-slate-600 leading-loose">
                 ご相談ベースのお問い合わせも歓迎していますので、課題がまだ整理できていない段階でもお気軽にお問い合わせください。
               </p>
 
-              <div className="rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-blue-400/15 p-6">
+              <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-blue-500/15 border border-blue-400/20 flex items-center justify-center">
-                    <Mail className="h-5 w-5 text-cyan-400" />
+                  <div className="w-12 h-12 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center">
+                    <Mail className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <div className="text-sm text-blue-300/70">Email</div>
-                    <div className="font-medium text-white">contact@webdesign-kagoshima.jp</div>
+                    <div className="text-sm text-slate-400">Email</div>
+                    <div className="font-medium text-slate-800">contact@webdesign-kagoshima.jp</div>
                   </div>
                 </div>
-                <div className="mt-6 pt-6 border-t border-blue-400/10 flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-sm text-blue-100/80">新規のご相談を受け付けています</span>
+                <div className="mt-6 pt-6 border-t border-slate-100 flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-sm text-slate-600">新規のご相談を受け付けています</span>
                 </div>
               </div>
             </div>
@@ -358,14 +334,14 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-blue-400/15 py-12">
+      <footer className="border-t border-slate-200 py-12 bg-white">
         <div className="container flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left">
-            <Link href="/" className="font-display font-bold text-xl">
-              <span className="text-white">ウェブデザイン</span>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">鹿児島</span>
+            <Link href="/" className="font-display font-semibold text-xl">
+              <span className="text-slate-900">ウェブデザイン</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-sky-400">鹿児島</span>
             </Link>
-            <p className="text-sm text-blue-100/50 mt-2">
+            <p className="text-sm text-slate-400 mt-2">
               © {new Date().getFullYear()} ウェブデザイン鹿児島. All rights reserved.
             </p>
           </div>
@@ -381,7 +357,7 @@ export default function Home() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm text-blue-100/70 hover:text-white transition-colors"
+                className="text-sm text-slate-500 hover:text-blue-600 transition-colors"
               >
                 {item.name}
               </Link>

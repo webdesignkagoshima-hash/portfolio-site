@@ -20,7 +20,7 @@ export function ContactForm() {
   const [category, setCategory] = useState<string>("Web制作")
 
   const inputClass =
-    "bg-slate-950/50 border-blue-400/20 text-white placeholder:text-blue-100/40 focus-visible:border-blue-500 focus-visible:ring-blue-500/20"
+    "bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus-visible:border-blue-500 focus-visible:ring-blue-500/20"
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -46,26 +46,26 @@ export function ContactForm() {
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
     >
-      <div className="relative overflow-hidden rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-blue-400/15 p-6 md:p-8">
+      <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 shadow-sm p-6 md:p-8">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className="space-y-2">
-              <Label htmlFor="company" className="text-blue-100">
+              <Label htmlFor="company" className="text-slate-700">
                 会社名
               </Label>
               <Input id="company" name="company" placeholder="株式会社サンプル" className={inputClass} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-blue-100">
-                お名前 <span className="text-cyan-400">*</span>
+              <Label htmlFor="name" className="text-slate-700">
+                お名前 <span className="text-blue-600">*</span>
               </Label>
               <Input id="name" name="name" placeholder="山田 太郎" required className={inputClass} />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-blue-100">
-              メールアドレス <span className="text-cyan-400">*</span>
+            <Label htmlFor="email" className="text-slate-700">
+              メールアドレス <span className="text-blue-600">*</span>
             </Label>
             <Input
               id="email"
@@ -78,7 +78,7 @@ export function ContactForm() {
           </div>
 
           <div className="space-y-2">
-            <span className="block text-sm text-blue-100">ご相談カテゴリ</span>
+            <span className="block text-sm text-slate-700">ご相談カテゴリ</span>
             <div className="flex flex-wrap gap-2">
               {categories.map((c) => (
                 <button
@@ -87,8 +87,8 @@ export function ContactForm() {
                   onClick={() => setCategory(c)}
                   className={`px-4 py-2 rounded-full text-sm border transition-colors ${
                     category === c
-                      ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-transparent"
-                      : "bg-slate-950/40 text-blue-100/80 border-blue-400/20 hover:border-blue-400/50"
+                      ? "bg-gradient-to-r from-blue-600 to-sky-400 text-white border-transparent"
+                      : "bg-white text-slate-600 border-slate-200 hover:border-blue-300"
                   }`}
                 >
                   {c}
@@ -99,8 +99,8 @@ export function ContactForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="message" className="text-blue-100">
-              ご相談内容 <span className="text-cyan-400">*</span>
+            <Label htmlFor="message" className="text-slate-700">
+              ご相談内容 <span className="text-blue-600">*</span>
             </Label>
             <Textarea
               id="message"
@@ -115,7 +115,7 @@ export function ContactForm() {
           <Button
             type="submit"
             size="lg"
-            className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-500 hover:to-blue-500 border-0 text-white"
+            className="w-full rounded-full bg-gradient-to-r from-blue-600 to-sky-400 hover:from-blue-700 hover:to-sky-500 border-0 text-white"
             disabled={isSubmitting}
           >
             {isSubmitting ? (

@@ -4,14 +4,14 @@ import "./globals.css"
 
 const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["300", "400", "500", "700"],
   variable: "--font-sans",
   display: "swap",
 })
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-display",
   display: "swap",
 })
@@ -29,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ja" className={`bg-slate-950 ${notoSansJP.variable} ${poppins.variable}`}>
-      <body className="font-sans">{children}</body>
+    <html lang="ja" className={`bg-white ${notoSansJP.variable} ${poppins.variable}`}>
+      <body className="font-sans antialiased">{children}</body>
     </html>
   )
 }

@@ -22,19 +22,18 @@ export function ServiceCard({ icon: Icon, title, description, items, index = 0 }
       whileHover={{ y: -6 }}
       className="group relative h-full"
     >
-      <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-b from-blue-500/30 to-cyan-400/20 opacity-0 group-hover:opacity-100 blur transition duration-500" />
-      <div className="relative h-full flex flex-col rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-blue-400/15 p-8">
-        <div className="w-14 h-14 rounded-xl bg-gradient-to-tr from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-900/40">
+      <div className="relative h-full flex flex-col rounded-2xl bg-white border border-slate-200 shadow-sm group-hover:shadow-lg group-hover:border-blue-200 transition-all duration-300 p-8">
+        <div className="w-14 h-14 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
           <Icon className="h-7 w-7 text-white" />
         </div>
 
-        <h3 className="font-display mt-6 text-2xl font-bold text-white">{title}</h3>
-        <p className="mt-3 text-sm text-blue-100/70 leading-relaxed">{description}</p>
+        <h3 className="font-display mt-6 text-2xl font-semibold text-slate-900">{title}</h3>
+        <p className="mt-3 text-sm text-slate-500 leading-loose">{description}</p>
 
-        <ul className="mt-6 space-y-2.5 border-t border-blue-400/10 pt-6">
+        <ul className="mt-6 space-y-2.5 border-t border-slate-100 pt-6">
           {items.map((item) => (
-            <li key={item} className="flex items-start gap-2.5 text-sm text-blue-50/90">
-              <Check className="h-4 w-4 mt-0.5 shrink-0 text-cyan-400" />
+            <li key={item} className="flex items-start gap-2.5 text-sm text-slate-700">
+              <Check className="h-4 w-4 mt-1 shrink-0 text-blue-600" />
               <span>{item}</span>
             </li>
           ))}

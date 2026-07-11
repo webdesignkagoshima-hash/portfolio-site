@@ -66,6 +66,23 @@
   .font-display {
     font-family: var(--font-display);
   }
+  /* Airy Japanese typography to match the reference tone */
+  body {
+    letter-spacing: 0.04em;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: 0.02em;
+  }
+}
+
+/* Wide tracking utility for oversized display headings */
+.tracking-display {
+  letter-spacing: 0.06em;
 }
 
 @layer utilities {

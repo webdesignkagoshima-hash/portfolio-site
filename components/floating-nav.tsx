@@ -17,9 +17,9 @@ const navItems = [
 
 function Logo() {
   return (
-    <Link href="/" className="font-display font-bold text-base leading-tight">
-      <span className="text-white">ウェブデザイン</span>
-      <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">鹿児島</span>
+    <Link href="/" className="font-display font-semibold text-base leading-tight">
+      <span className="text-slate-900">ウェブデザイン</span>
+      <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-sky-400">鹿児島</span>
     </Link>
   )
 }
@@ -51,14 +51,14 @@ export function FloatingNav() {
         animate={{ y: isVisible ? 0 : -100 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="relative px-4 py-3 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-blue-400/20 shadow-lg shadow-blue-950/40">
+        <div className="relative px-4 py-3 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200 shadow-lg shadow-slate-900/5">
           {isMobile ? (
             <div className="relative flex items-center justify-between">
               <Logo />
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-blue-100 hover:text-white hover:bg-blue-500/20"
+                className="text-slate-700 hover:text-blue-600 hover:bg-blue-50"
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="メニューを開閉"
               >
@@ -73,7 +73,7 @@ export function FloatingNav() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="px-3 py-1 text-sm font-medium text-blue-100/80 hover:text-white transition-colors"
+                    className="px-3 py-1 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
                     onClick={handleNavClick}
                   >
                     {item.name}
@@ -82,7 +82,7 @@ export function FloatingNav() {
                 <Button
                   asChild
                   size="sm"
-                  className="ml-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-500 hover:to-blue-500 border-0 text-white"
+                  className="ml-2 rounded-full bg-gradient-to-r from-blue-600 to-sky-400 hover:from-blue-700 hover:to-sky-500 border-0 text-white"
                 >
                   <Link href="#contact">無料相談はこちら</Link>
                 </Button>
@@ -95,7 +95,7 @@ export function FloatingNav() {
       {/* Mobile menu */}
       {isMobile && (
         <motion.div
-          className={`fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-md ${isOpen ? "block" : "hidden"}`}
+          className={`fixed inset-0 z-40 bg-white/98 backdrop-blur-md ${isOpen ? "block" : "hidden"}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: isOpen ? 1 : 0 }}
           transition={{ duration: 0.3 }}
@@ -105,7 +105,7 @@ export function FloatingNav() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="px-8 py-4 text-2xl font-medium text-white hover:text-blue-400 transition-colors"
+                className="px-8 py-4 text-2xl font-medium text-slate-800 hover:text-blue-600 transition-colors"
                 onClick={handleNavClick}
               >
                 {item.name}
@@ -113,7 +113,7 @@ export function FloatingNav() {
             ))}
             <Button
               asChild
-              className="mt-6 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-500 hover:to-blue-500 border-0 text-white"
+              className="mt-6 rounded-full bg-gradient-to-r from-blue-600 to-sky-400 hover:from-blue-700 hover:to-sky-500 border-0 text-white"
             >
               <Link href="#contact" onClick={handleNavClick}>
                 無料相談はこちら
