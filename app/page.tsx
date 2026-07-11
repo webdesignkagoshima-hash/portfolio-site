@@ -24,6 +24,7 @@ import { SmoothScroll } from "@/components/smooth-scroll"
 import { SectionHeading } from "@/components/section-heading"
 import { ServiceCard } from "@/components/service-card"
 import { WorkCard } from "@/components/work-card"
+import { CountUp } from "@/components/count-up"
 
 const teamRoles = [
   {
@@ -62,9 +63,9 @@ const strengths = [
 ]
 
 const numbers = [
-  { label: "月間広告費運用実績", value: "1,000万円", unit: "以上" },
-  { label: "支援実績数（制作・改善案件）", value: "100件", unit: "以上" },
-  { label: "継続率（並走パートナー）", value: "90%", unit: "超" },
+  { label: "月間広告費運用実績", value: 1000, suffix: "万円", unit: "以上" },
+  { label: "支援実績数（制作・改善案件）", value: 100, suffix: "件", unit: "以上" },
+  { label: "継続率（並走パートナー）", value: 90, suffix: "%", unit: "超" },
 ]
 
 const services = [
@@ -238,9 +239,11 @@ export default function Home() {
                   className="rounded-2xl bg-gradient-to-b from-blue-50 to-white border border-slate-200 p-8 text-center"
                 >
                   <div className="font-display flex items-end justify-center gap-1">
-                    <span className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-sky-400">
-                      {n.value}
-                    </span>
+                    <CountUp
+                      value={n.value}
+                      className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-sky-400"
+                    />
+                    <span className="text-2xl md:text-3xl font-bold text-blue-600 pb-0.5">{n.suffix}</span>
                     <span className="text-lg font-semibold text-blue-500 pb-1">{n.unit}</span>
                   </div>
                   <p className="mt-3 text-sm text-slate-500">{n.label}</p>

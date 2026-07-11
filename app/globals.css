@@ -85,6 +85,25 @@
   letter-spacing: 0.06em;
 }
 
+/* Animated hero gradient */
+.animate-hero-gradient {
+  background: linear-gradient(135deg, #0b4fd6 0%, #1e7bf0 35%, #39b6f5 65%, #0b4fd6 100%);
+  background-size: 300% 300%;
+  animation: heroGradient 14s ease infinite;
+}
+
+@keyframes heroGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 @layer utilities {
   .animation-delay-2000 {
     animation-delay: 2s;

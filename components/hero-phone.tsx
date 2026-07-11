@@ -2,7 +2,7 @@
 
 import { useRef } from "react"
 import Link from "next/link"
-import { motion, useScroll, useTransform, useSpring } from "framer-motion"
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -17,41 +17,68 @@ export function HeroPhone() {
 
   const smooth = useSpring(scrollYProgress, { stiffness: 80, damping: 20 })
 
-  // Parallax layers
+  // Parallax layers (scroll)
   const copyY = useTransform(smooth, [0, 1], [0, 80])
   const copyOpacity = useTransform(smooth, [0, 0.7], [1, 0])
   const photosY = useTransform(smooth, [0, 1], [0, -120])
   const bgTextY = useTransform(smooth, [0, 1], [0, 160])
 
+  // Mouse parallax
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const smx = useSpring(mx, { stiffness: 60, damping: 18 })
+  const smy = useSpring(my, { stiffness: 60, damping: 18 })
+  const photosPX = useTransform(smx, [-0.5, 0.5], [24, -24])
+  const photosPY = useTransform(smy, [-0.5, 0.5], [24, -24])
+  const copyPX = useTransform(smx, [-0.5, 0.5], [-10, 10])
+
+  function handleMouseMove(e: React.MouseEvent) {
+    const rect = e.currentTarget.getBoundingClientRect()
+    mx.set((e.clientX - rect.left) / rect.width - 0.5)
+    my.set((e.clientY - rect.top) / rect.height - 0.5)
+  }
+
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen overflow-hidden bg-[linear-gradient(135deg,#0b4fd6_0%,#1e7bf0_45%,#39b6f5_100%)]"
+      onMouseMove={handleMouseMove}
+      className="animate-hero-gradient relative min-h-screen overflow-hidden"
     >
-      {/* Soft light glows */}
+      {/* Soft floating light glows */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute -top-24 -left-24 w-[32rem] h-[32rem] bg-white rounded-full mix-blend-overlay filter blur-[130px] opacity-30" />
-        <div className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-cyan-200 rounded-full mix-blend-overlay filter blur-[130px] opacity-40" />
+        <motion.div
+          className="absolute -top-24 -left-24 w-[32rem] h-[32rem] bg-white rounded-full mix-blend-overlay filter blur-[130px] opacity-30"
+          animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
+          transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-cyan-200 rounded-full mix-blend-overlay filter blur-[130px] opacity-40"
+          animate={{ x: [0, -50, 0], y: [0, -30, 0] }}
+          transition={{ duration: 15, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+        />
       </div>
 
       {/* Oversized thin wordmark background */}
       <motion.div
         style={{ y: bgTextY }}
-        className="pointer-events-none absolute inset-x-0 bottom-10 z-0 text-center select-none"
+        className="pointer-events-none absolute inset-x-0 bottom-6 md:bottom-10 z-0 text-center select-none"
       >
-        <span className="font-display block font-light tracking-display text-white/10 leading-none text-[16vw]">
+        <span className="font-display block font-light tracking-display text-white/10 leading-none text-[22vw] md:text-[16vw]">
           DIGITAL
         </span>
       </motion.div>
 
-      {/* Floating photo collage (right side) */}
-      <motion.div style={{ y: photosY }} className="absolute inset-0 z-[1] hidden md:block">
+      {/* Floating photo collage - desktop */}
+      <motion.div
+        style={{ y: photosY, x: photosPX, translateY: photosPY }}
+        className="absolute inset-0 z-[1] hidden md:block"
+      >
         <PhotoCollage />
       </motion.div>
 
       {/* Foreground copy */}
       <div className="container relative z-10 min-h-screen flex flex-col justify-center py-32">
-        <motion.div style={{ y: copyY, opacity: copyOpacity }} className="max-w-3xl">
+        <motion.div style={{ y: copyY, opacity: copyOpacity, x: copyPX }} className="max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -72,6 +99,25 @@ export function HeroPhone() {
             <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white/70">Creative</span>
             <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl">Digital Partner.</span>
           </motion.h1>
+
+          {/* Mobile photo collage */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.35 }}
+            className="mt-8 flex gap-3 md:hidden"
+          >
+            {mobilePhotos.map((src, i) => (
+              <motion.div
+                key={src}
+                animate={{ y: [0, i % 2 === 0 ? -8 : 8, 0] }}
+                transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: i * 0.4 }}
+                className="flex-1 overflow-hidden rounded-2xl shadow-xl shadow-blue-950/30 ring-1 ring-white/20"
+              >
+                <img src={src || "/placeholder.svg"} alt="" className="w-full aspect-[3/4] object-cover" />
+              </motion.div>
+            ))}
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -132,6 +178,8 @@ export function HeroPhone() {
     </section>
   )
 }
+
+const mobilePhotos = ["/hero/handshake.png", "/hero/team-meeting.png", "/hero/designer.png"]
 
 function PhotoCollage() {
   const photos = [
