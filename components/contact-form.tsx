@@ -9,11 +9,18 @@ import { Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
+
+const categories = ["Web制作", "集客支援", "採用支援", "その他"]
 
 export function ContactForm() {
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [category, setCategory] = useState<string>("Web制作")
+
+  const inputClass =
+    "bg-slate-950/50 border-blue-400/20 text-white placeholder:text-blue-100/40 focus-visible:border-blue-500 focus-visible:ring-blue-500/20"
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -23,12 +30,13 @@ export function ContactForm() {
     await new Promise((resolve) => setTimeout(resolve, 1500))
 
     toast({
-      title: "Message sent!",
-      description: "Thanks for reaching out. I'll get back to you soon.",
+      title: "送信しました",
+      description: "お問い合わせありがとうございます。担当者より折り返しご連絡いたします。",
     })
 
     setIsSubmitting(false)
     e.currentTarget.reset()
+    setCategory("Web制作")
   }
 
   return (
@@ -38,58 +46,87 @@ export function ContactForm() {
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
     >
-      <div className="relative overflow-hidden rounded-xl bg-zinc-800/50 backdrop-blur-sm border border-zinc-700/50 p-6 transition-all duration-300 hover:border-purple-500/50">
-        <div className="absolute -inset-1 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl blur opacity-25 hover:opacity-100 transition duration-1000 hover:duration-200"></div>
+      <div className="relative overflow-hidden rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-blue-400/15 p-6 md:p-8">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="space-y-2">
+              <Label htmlFor="company" className="text-blue-100">
+                会社名
+              </Label>
+              <Input id="company" name="company" placeholder="株式会社サンプル" className={inputClass} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-blue-100">
+                お名前 <span className="text-cyan-400">*</span>
+              </Label>
+              <Input id="name" name="name" placeholder="山田 太郎" required className={inputClass} />
+            </div>
+          </div>
 
-        <div className="relative">
-          <h3 className="text-2xl font-bold mb-6">Send Me a Message</h3>
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-blue-100">
+              メールアドレス <span className="text-cyan-400">*</span>
+            </Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              required
+              className={inputClass}
+            />
+          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Input
-                placeholder="Your Name"
-                required
-                className="bg-zinc-900/50 border-zinc-700 focus:border-purple-500 focus:ring-purple-500/20"
-              />
+          <div className="space-y-2">
+            <span className="block text-sm text-blue-100">ご相談カテゴリ</span>
+            <div className="flex flex-wrap gap-2">
+              {categories.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setCategory(c)}
+                  className={`px-4 py-2 rounded-full text-sm border transition-colors ${
+                    category === c
+                      ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-transparent"
+                      : "bg-slate-950/40 text-blue-100/80 border-blue-400/20 hover:border-blue-400/50"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
             </div>
-            <div className="space-y-2">
-              <Input
-                type="email"
-                placeholder="Your Email"
-                required
-                className="bg-zinc-900/50 border-zinc-700 focus:border-purple-500 focus:ring-purple-500/20"
-              />
-            </div>
-            <div className="space-y-2">
-              <Input
-                placeholder="Subject"
-                required
-                className="bg-zinc-900/50 border-zinc-700 focus:border-purple-500 focus:ring-purple-500/20"
-              />
-            </div>
-            <div className="space-y-2">
-              <Textarea
-                placeholder="Your Message"
-                rows={5}
-                required
-                className="bg-zinc-900/50 border-zinc-700 focus:border-purple-500 focus:ring-purple-500/20"
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-500 hover:to-purple-500 border-0"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>Sending...</>
-              ) : (
-                <>
-                  Send Message <Send className="ml-2 h-4 w-4" />
-                </>
-              )}
-            </Button>
-          </form>
-        </div>
+            <input type="hidden" name="category" value={category} />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="message" className="text-blue-100">
+              ご相談内容 <span className="text-cyan-400">*</span>
+            </Label>
+            <Textarea
+              id="message"
+              name="message"
+              rows={5}
+              placeholder="現状の課題やご相談したい内容をご記入ください。整理できていない段階でも構いません。"
+              required
+              className={inputClass}
+            />
+          </div>
+
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-500 hover:to-blue-500 border-0 text-white"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>送信中...</>
+            ) : (
+              <>
+                無料相談を送信する <Send className="ml-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </form>
       </div>
     </motion.div>
   )

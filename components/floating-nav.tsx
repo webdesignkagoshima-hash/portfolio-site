@@ -8,6 +8,22 @@ import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useMobile } from "@/hooks/use-mobile"
 
+const navItems = [
+  { name: "About", href: "#about" },
+  { name: "Service", href: "#service" },
+  { name: "Works", href: "#works" },
+  { name: "Contact", href: "#contact" },
+]
+
+function Logo() {
+  return (
+    <Link href="/" className="font-display font-bold text-base leading-tight">
+      <span className="text-white">ウェブデザイン</span>
+      <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">鹿児島</span>
+    </Link>
+  )
+}
+
 export function FloatingNav() {
   const [isVisible, setIsVisible] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -15,79 +31,62 @@ export function FloatingNav() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100) {
-        setIsVisible(true)
-      } else {
-        setIsVisible(false)
-      }
+      setIsVisible(window.scrollY > 100)
     }
-
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const navItems = [
-    { name: "About", href: "#about" },
-    { name: "Skills", href: "#skills" },
-    { name: "Projects", href: "#projects" },
-    { name: "Experience", href: "#experience" },
-    { name: "Contact", href: "#contact" },
-  ]
-
   const handleNavClick = () => {
-    if (isMobile) {
-      setIsOpen(false)
-    }
+    if (isMobile) setIsOpen(false)
   }
 
   return (
     <>
       <motion.div
-        className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[min(92vw,64rem)] ${
+          isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
         initial={{ y: -100 }}
         animate={{ y: isVisible ? 0 : -100 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="relative px-4 py-3 rounded-full bg-zinc-800/80 backdrop-blur-md border border-zinc-700/50 shadow-lg">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur opacity-50"></div>
-
+        <div className="relative px-4 py-3 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-blue-400/20 shadow-lg shadow-blue-950/40">
           {isMobile ? (
             <div className="relative flex items-center justify-between">
-              <Link href="/" className="font-bold text-lg">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">Shine</span>
-                <span className="text-white">KKA</span>
-              </Link>
+              <Logo />
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-zinc-400 hover:text-white hover:bg-zinc-700/50"
+                className="text-blue-100 hover:text-white hover:bg-blue-500/20"
                 onClick={() => setIsOpen(!isOpen)}
+                aria-label="メニューを開閉"
               >
                 {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
             </div>
           ) : (
-            <div className="relative flex items-center gap-1">
-              <Link href="/" className="font-bold text-lg mr-4">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">Shine</span>
-                <span className="text-white">KKA</span>
-              </Link>
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="px-3 py-1 text-sm font-medium text-zinc-400 hover:text-white transition-colors"
-                  onClick={handleNavClick}
+            <div className="relative flex items-center justify-between">
+              <Logo />
+              <div className="flex items-center gap-1">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="px-3 py-1 text-sm font-medium text-blue-100/80 hover:text-white transition-colors"
+                    onClick={handleNavClick}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+                <Button
+                  asChild
+                  size="sm"
+                  className="ml-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-500 hover:to-blue-500 border-0 text-white"
                 >
-                  {item.name}
-                </Link>
-              ))}
-              <Button
-                size="sm"
-                className="ml-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-500 hover:to-purple-500 border-0"
-              >
-                Resume
-              </Button>
+                  <Link href="#contact">無料相談はこちら</Link>
+                </Button>
+              </div>
             </div>
           )}
         </div>
@@ -96,7 +95,7 @@ export function FloatingNav() {
       {/* Mobile menu */}
       {isMobile && (
         <motion.div
-          className={`fixed inset-0 z-40 bg-black/90 backdrop-blur-md ${isOpen ? "block" : "hidden"}`}
+          className={`fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-md ${isOpen ? "block" : "hidden"}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: isOpen ? 1 : 0 }}
           transition={{ duration: 0.3 }}
@@ -106,14 +105,19 @@ export function FloatingNav() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="px-8 py-4 text-2xl font-medium text-white hover:text-purple-400 transition-colors"
+                className="px-8 py-4 text-2xl font-medium text-white hover:text-blue-400 transition-colors"
                 onClick={handleNavClick}
               >
                 {item.name}
               </Link>
             ))}
-            <Button className="mt-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-500 hover:to-purple-500 border-0">
-              Resume
+            <Button
+              asChild
+              className="mt-6 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-500 hover:to-blue-500 border-0 text-white"
+            >
+              <Link href="#contact" onClick={handleNavClick}>
+                無料相談はこちら
+              </Link>
             </Button>
           </div>
         </motion.div>

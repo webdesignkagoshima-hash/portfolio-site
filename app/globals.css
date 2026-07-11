@@ -58,6 +58,16 @@
   }
 }
 
+@layer base {
+  :root {
+    --font-sans: "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  }
+  .font-display {
+    font-family: var(--font-display);
+  }
+}
+
 @layer utilities {
   .animation-delay-2000 {
     animation-delay: 2s;
