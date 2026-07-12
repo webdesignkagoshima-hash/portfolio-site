@@ -1,16 +1,27 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { motion, useScroll, useTransform, useSpring } from "framer-motion"
-import { ArrowRight, Github, Linkedin, Mail } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
 export function HeroPhone() {
   const sectionRef = useRef<HTMLElement>(null)
 
-  // Scroll progress across the hero section
+  // Scroll-linked parallax updates several transforms (including the heavy 3D
+  // ring) on the main thread every scroll frame, which janks on mobile. Only
+  // enable it on desktop; mobile keeps everything static during scroll.
+  const [enableParallax, setEnableParallax] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px) and (pointer: fine)")
+    const update = () => setEnableParallax(mq.matches)
+    update()
+    mq.addEventListener("change", update)
+    return () => mq.removeEventListener("change", update)
+  }, [])
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -18,149 +29,133 @@ export function HeroPhone() {
 
   const smooth = useSpring(scrollYProgress, { stiffness: 80, damping: 20 })
 
-  // Scroll-driven phone transforms
-  const phoneY = useTransform(smooth, [0, 1], [0, -160])
-  const phoneScale = useTransform(smooth, [0, 1], [1, 0.82])
-  const phoneRotate = useTransform(smooth, [0, 1], [-8, 10])
-  const phoneOpacity = useTransform(smooth, [0, 0.85], [1, 0])
-
-  // Background headline parallax
-  const bgTextY = useTransform(smooth, [0, 1], [0, 220])
-  const bgTextOpacity = useTransform(smooth, [0, 0.7], [0.08, 0])
-
-  // Foreground copy parallax
-  const copyY = useTransform(smooth, [0, 1], [0, 90])
-  const copyOpacity = useTransform(smooth, [0, 0.6], [1, 0])
+  // Parallax layers (scroll only, desktop only)
+  const copyY = useTransform(smooth, [0, 1], [0, 60])
+  const copyOpacity = useTransform(smooth, [0, 0.7], [1, 0])
+  const photosY = useTransform(smooth, [0, 1], [0, -80])
+  const bgTextY = useTransform(smooth, [0, 1], [0, 120])
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950"
+      className="animate-hero-gradient relative min-h-screen overflow-hidden flex items-center pt-8 pb-8 lg:py-0"
     >
-      {/* Ambient blue glows */}
+      {/* Soft light glows (static, no blend mode - blend compositing behind the
+          rotating ring is a major cause of jank on mobile) */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute -top-20 left-1/4 w-[28rem] h-[28rem] bg-blue-600 rounded-full mix-blend-screen filter blur-[120px] opacity-25" />
-        <div className="absolute bottom-0 right-1/4 w-[26rem] h-[26rem] bg-cyan-500 rounded-full mix-blend-screen filter blur-[120px] opacity-20" />
-        <div className="absolute top-1/3 right-10 w-72 h-72 bg-sky-500 rounded-full mix-blend-screen filter blur-[100px] opacity-20" />
+        <div className="absolute -top-24 -left-24 w-[28rem] h-[28rem] bg-white/15 rounded-full blur-3xl" />
+        <div className="absolute -bottom-16 -right-16 w-[26rem] h-[26rem] bg-cyan-300/20 rounded-full blur-3xl" />
       </div>
 
-      {/* Oversized background wordmark */}
+      {/* Oversized thin wordmark background */}
       <motion.div
-        style={{ y: bgTextY, opacity: bgTextOpacity }}
-        className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 z-0 text-center"
+        style={enableParallax ? { y: bgTextY } : undefined}
+        className="pointer-events-none absolute inset-x-0 bottom-4 md:bottom-8 z-0 text-center select-none"
       >
-        <span className="block font-bold tracking-tighter text-white leading-none text-[22vw]">PORTFOLIO</span>
+        <span className="font-display block font-light tracking-display text-white/10 leading-none text-[22vw] md:text-[15vw]">
+          DIGITAL
+        </span>
       </motion.div>
 
-      <div className="container relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center py-24">
-        {/* Left: copy */}
-        <motion.div style={{ y: copyY, opacity: copyOpacity }} className="space-y-6 text-center lg:text-left">
+      {/* Content grid */}
+      <div className="container relative z-10 w-full">
+        <div className="grid lg:grid-cols-2 gap-3 lg:gap-4 items-center">
+          {/* Copy */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/30 backdrop-blur-sm"
-          >
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="text-sm font-medium text-blue-200">Software Engineer & Creative Developer</span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-balance leading-[0.95]"
-          >
-            <span className="block text-white">CRAFTED</span>
-            <span className="block text-white">FOR THE</span>
-            <span className="block bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-400">
-              SMALL SCREEN
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="text-lg text-blue-100/70 max-w-[520px] mx-auto lg:mx-0 leading-relaxed"
-          >
-            I&apos;m Shine Kyaw Kyaw Aung — I design and build fast, beautiful mobile-first experiences with code,
-            creativity, and a passion for the details.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="flex flex-wrap gap-4 justify-center lg:justify-start pt-2"
-          >
-            <Button
-              asChild
-              className="group bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-cyan-500 hover:to-blue-500 border-0 text-white"
-            >
-              <Link href="#projects">
-                View Projects
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="border-blue-400/40 text-blue-200 hover:text-white hover:border-blue-300 bg-transparent"
-            >
-              <Link href="#contact">Contact Me</Link>
-            </Button>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex gap-3 justify-center lg:justify-start pt-2"
-          >
-            {[
-              { Icon: Github, href: "https://github.com/shinekyaw", label: "GitHub" },
-              { Icon: Linkedin, href: "https://www.linkedin.com/in/shinekyawkyawaung/", label: "LinkedIn" },
-              { Icon: Mail, href: "mailto:shinekyawkyawaung@gmail.com", label: "Email" },
-            ].map(({ Icon, href, label }) => (
-              <Link key={label} href={href} target="_blank" rel="noopener noreferrer">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full bg-blue-500/10 hover:bg-blue-500/20 text-blue-200 hover:text-white"
-                >
-                  <Icon className="h-5 w-5" />
-                  <span className="sr-only">{label}</span>
-                </Button>
-              </Link>
-            ))}
-          </motion.div>
-        </motion.div>
-
-        {/* Right: floating phone */}
-        <div className="relative flex justify-center items-center [perspective:1200px]">
-          <motion.div
-            style={{ y: phoneY, scale: phoneScale, rotate: phoneRotate, opacity: phoneOpacity }}
-            className="relative"
+            style={enableParallax ? { y: copyY, opacity: copyOpacity } : undefined}
+            className="order-2 lg:order-1 text-center lg:text-left flex flex-col items-center lg:items-start"
           >
             <motion.div
-              animate={{ y: [0, -16, 0] }}
-              transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 border border-white/30 backdrop-blur-sm mb-5"
             >
-              <PhoneMockup />
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              <span className="text-xs sm:text-sm font-medium text-white tracking-wide">
+                鹿児島発・全国対応のデジタルパートナー
+              </span>
             </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="font-display font-extrabold tracking-tight text-white leading-[1.14] text-4xl sm:text-5xl lg:text-6xl xl:text-7xl"
+            >
+              <span className="block whitespace-nowrap">Web、集客、採用の</span>
+              <span className="block">可能性を。</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="font-display mt-3 text-base sm:text-xl lg:text-2xl font-light tracking-display text-white/70"
+            >
+              Creative Digital Partner.
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-4 text-sm md:text-base text-white/75 max-w-md leading-relaxed"
+            >
+              Web制作・広告運用・SNS運用・採用支援まで。企業ごとの課題に合わせた最適な施策を設計し、成果につながる仕組みづくりを支援します。
+            </motion.p>
+
+            {/* CTAs - centered, equal size */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-6 flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-center justify-center lg:justify-start"
+            >
+              <Button
+                asChild
+                size="lg"
+                className="btn-shine group rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 border-0 font-bold shadow-lg shadow-amber-500/30 w-full sm:w-56"
+              >
+                <Link href="#contact">
+                  無料相談はこちら
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="group rounded-full border-white/50 text-white hover:bg-white/10 hover:text-white bg-transparent w-full sm:w-56"
+              >
+                <Link href="#works">
+                  実績を見る
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </motion.div>
+          </motion.div>
+
+          {/* Rotating 3D photo ring */}
+          <motion.div
+            style={enableParallax ? { y: photosY } : undefined}
+            className="order-1 lg:order-2 relative h-[320px] sm:h-[420px] lg:h-[560px]"
+          >
+            <div className="scale-[0.66] sm:scale-[0.82] lg:scale-100 h-full w-full">
+              <PhotoRing />
+            </div>
           </motion.div>
         </div>
       </div>
 
       {/* Scroll cue */}
       <motion.div
-        style={{ opacity: copyOpacity }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        style={enableParallax ? { opacity: copyOpacity } : undefined}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden sm:block"
       >
-        <div className="w-6 h-10 rounded-full border-2 border-blue-300/30 flex justify-center items-start p-1">
+        <div className="w-6 h-10 rounded-full border-2 border-white/40 flex justify-center items-start p-1">
           <motion.div
-            className="w-1.5 h-1.5 rounded-full bg-cyan-400"
+            className="w-1.5 h-1.5 rounded-full bg-white"
             animate={{ y: [0, 14, 0] }}
             transition={{ duration: 1.6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
           />
@@ -170,63 +165,67 @@ export function HeroPhone() {
   )
 }
 
-function PhoneMockup() {
+const ringPhotos = [
+  "/hero/team-meeting.webp",
+  "/hero/designer.webp",
+  "/hero/office.webp",
+  "/hero/laptop-work.webp",
+  "/hero/meeting-2.webp",
+  "/hero/handshake.webp",
+]
+
+function PhotoRing() {
+  const count = ringPhotos.length
+  const radius = 300
+
   return (
-    <div className="relative">
-      {/* Glow behind phone */}
-      <div className="absolute -inset-8 bg-gradient-to-tr from-blue-500/30 to-cyan-400/30 rounded-[4rem] blur-3xl" />
-
-      {/* Device frame */}
-      <div className="relative w-[260px] sm:w-[300px] aspect-[9/19] rounded-[3rem] bg-gradient-to-b from-slate-800 to-slate-900 p-3 shadow-2xl shadow-blue-950/60 border border-blue-300/10 ring-1 ring-white/5">
-        {/* Screen */}
-        <div className="relative h-full w-full rounded-[2.4rem] overflow-hidden bg-gradient-to-b from-blue-600 via-blue-700 to-slate-900">
-          {/* Dynamic island */}
-          <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 w-20 h-6 rounded-full bg-black/80" />
-
-          {/* Status bar */}
-          <div className="relative z-10 flex items-center justify-between px-6 pt-4 text-[10px] font-medium text-white/90">
-            <span>9:41</span>
-            <span>Portfolio</span>
-          </div>
-
-          {/* Profile header */}
-          <div className="relative z-10 flex flex-col items-center mt-8 px-5">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-cyan-300 to-blue-200 p-0.5">
-              <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-xl font-bold text-cyan-300">
-                S
-              </div>
-            </div>
-            <div className="mt-3 text-base font-bold text-white">Shine K. K. Aung</div>
-            <div className="text-[11px] text-blue-100/80">Mobile-first Developer</div>
-
-            <div className="mt-4 flex gap-2">
-              <span className="px-3 py-1 rounded-full bg-white/15 text-[10px] text-white">React</span>
-              <span className="px-3 py-1 rounded-full bg-white/15 text-[10px] text-white">Next.js</span>
-              <span className="px-3 py-1 rounded-full bg-white/15 text-[10px] text-white">UI/UX</span>
-            </div>
-          </div>
-
-          {/* Content cards */}
-          <div className="relative z-10 mt-6 px-4 space-y-2.5">
-            {[
-              { label: "Projects", value: "24" },
-              { label: "Experience", value: "6 yrs" },
-              { label: "Open to work", value: "Yes" },
-            ].map((row) => (
+    <div className="photo-ring-scene relative h-full w-full flex items-center justify-center">
+      {/* Shared 3D space so the phone and photos depth-sort together */}
+      <div className="ring-space relative">
+        {/* Orbiting photo ring */}
+        <div className="photo-ring">
+          {ringPhotos.map((src, i) => {
+            const angle = (360 / count) * i
+            return (
               <div
-                key={row.label}
-                className="flex items-center justify-between rounded-xl bg-white/10 backdrop-blur-sm px-4 py-3 border border-white/10"
+                key={src}
+                className="photo-ring-item"
+                style={{ transform: `rotateY(${angle}deg) translateZ(${radius}px)` }}
               >
-                <span className="text-[11px] text-blue-50/80">{row.label}</span>
-                <span className="text-[12px] font-semibold text-white">{row.value}</span>
+                <div
+                  className="photo-ring-face overflow-hidden rounded-xl shadow-lg shadow-blue-950/30 ring-1 ring-white/25"
+                  style={{ width: 168, height: 224, marginLeft: -84, marginTop: -112 }}
+                >
+                  <img
+                    src={src || "/placeholder.svg"}
+                    alt=""
+                    width={168}
+                    height={224}
+                    decoding="async"
+                    draggable={false}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
-            ))}
-          </div>
+            )
+          })}
+        </div>
 
-          {/* CTA pill */}
-          <div className="absolute bottom-5 left-0 right-0 px-4 z-10">
-            <div className="w-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 py-2.5 text-center text-[12px] font-semibold text-slate-900">
-              Get in touch
+        {/* Center tilted phone (static 3D transform; float runs via CSS on the
+            compositor so it stays smooth on mobile) */}
+        <div
+          style={{ transform: "rotateZ(-10deg) rotateY(-12deg) translateZ(0)" }}
+          className="phone-center absolute top-1/2 left-1/2 -ml-[104px] -mt-[212px] w-[208px] h-[424px]"
+        >
+          <div className="phone-float h-full w-full rounded-[2.6rem] bg-slate-950 p-2.5 shadow-2xl shadow-blue-950/50 ring-1 ring-white/20">
+            {/* notch */}
+            <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-20 h-6 rounded-b-2xl bg-slate-950 z-10" />
+            <div className="relative h-full w-full overflow-hidden rounded-[2rem] bg-gradient-to-b from-blue-600 to-blue-800 flex flex-col items-center justify-center">
+              <div className="w-20 h-20 rounded-3xl bg-white/95 flex items-center justify-center shadow-lg">
+                <span className="font-display text-3xl font-extrabold text-blue-700">W</span>
+              </div>
+              <span className="mt-5 font-display text-base font-medium text-white/90 tracking-wide">Web Design</span>
+              <span className="text-xs text-white/60 tracking-widest">KAGOSHIMA</span>
             </div>
           </div>
         </div>

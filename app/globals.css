@@ -58,6 +58,131 @@
   }
 }
 
+@layer base {
+  :root {
+    --font-sans: "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  }
+  .font-display {
+    font-family: var(--font-display);
+  }
+  /* Airy Japanese typography to match the reference tone */
+  body {
+    letter-spacing: 0.04em;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: 0.02em;
+  }
+}
+
+/* Wide tracking utility for oversized display headings */
+.tracking-display {
+  letter-spacing: 0.06em;
+}
+
+/* Hero gradient (static for performance; animating background-position
+   forces a full-screen repaint every frame and janks on mobile) */
+.animate-hero-gradient {
+  background: linear-gradient(135deg, #0b4fd6 0%, #1e7bf0 40%, #39b6f5 100%);
+}
+
+/* Shine sweep for CTA buttons */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  transform: skewX(-20deg);
+  animation: shineSweep 3.8s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes shineSweep {
+  0% {
+    left: -150%;
+  }
+  55% {
+    left: 160%;
+  }
+  100% {
+    left: 160%;
+  }
+}
+
+/* 3D rotating photo ring (hero) */
+.photo-ring-scene {
+  perspective: 1500px;
+}
+/* Shared 3D context so the phone and photos depth-sort together */
+.ring-space {
+  width: 1px;
+  height: 1px;
+  transform-style: preserve-3d;
+}
+.photo-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-style: preserve-3d;
+  animation: ringSpin 34s linear infinite;
+  will-change: transform;
+}
+.photo-ring-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-style: preserve-3d;
+}
+/* Photos face radially outward and stay visible all the way around the ring,
+   passing in front of and behind the phone for a full rotation */
+.photo-ring-face {
+  backface-visibility: visible;
+}
+.phone-center {
+  transform-style: preserve-3d;
+}
+/* GPU-composited phone float (kept off the main thread) */
+.phone-float {
+  animation: phoneFloat 5s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes phoneFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+}
+@keyframes ringSpin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-ring,
+  .phone-float,
+  .btn-shine::after {
+    animation: none;
+  }
+}
+
 @layer utilities {
   .animation-delay-2000 {
     animation-delay: 2s;
