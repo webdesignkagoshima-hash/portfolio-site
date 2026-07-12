@@ -10,17 +10,20 @@ import { Button } from "@/components/ui/button"
 export function HeroPhone() {
   const sectionRef = useRef<HTMLElement>(null)
 
-  // Scroll-linked parallax updates several transforms (including the heavy 3D
-  // ring) on the main thread every scroll frame, which janks on mobile. Only
-  // enable it on desktop; mobile keeps everything static during scroll.
-  const [enableParallax, setEnableParallax] = useState(false)
+  // The 3D rotating ring (perspective + preserve-3d + rotating shadowed photos)
+  // is inherently heavy on mobile. Render it only on desktop; mobile gets a
+  // lightweight static visual with no continuous animation.
+  const [isDesktop, setIsDesktop] = useState(false)
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px) and (pointer: fine)")
-    const update = () => setEnableParallax(mq.matches)
+    const update = () => setIsDesktop(mq.matches)
     update()
     mq.addEventListener("change", update)
     return () => mq.removeEventListener("change", update)
   }, [])
+
+  // Parallax is desktop-only too (scroll-linked transforms jank on mobile).
+  const enableParallax = isDesktop
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -136,14 +139,19 @@ export function HeroPhone() {
             </motion.div>
           </motion.div>
 
-          {/* Rotating 3D photo ring */}
+          {/* Hero visual: heavy 3D rotating ring on desktop, lightweight static
+              collage on mobile for smooth performance */}
           <motion.div
             style={enableParallax ? { y: photosY } : undefined}
             className="order-1 lg:order-2 relative h-[320px] sm:h-[420px] lg:h-[560px]"
           >
-            <div className="scale-[0.66] sm:scale-[0.82] lg:scale-100 h-full w-full">
-              <PhotoRing />
-            </div>
+            {isDesktop ? (
+              <div className="h-full w-full">
+                <PhotoRing />
+              </div>
+            ) : (
+              <PhotoCollageStatic />
+            )}
           </motion.div>
         </div>
       </div>
@@ -173,6 +181,49 @@ const ringPhotos = [
   "/hero/meeting-2.webp",
   "/hero/handshake.webp",
 ]
+
+// Lightweight, no-animation hero visual for mobile / touch devices.
+function PhotoCollageStatic() {
+  return (
+    <div className="relative h-full w-full flex items-center justify-center">
+      {/* Side photos */}
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 -rotate-6 w-[34%] max-w-[150px] aspect-[3/4] overflow-hidden rounded-2xl shadow-lg shadow-blue-950/30 ring-1 ring-white/25">
+        <img
+          src="/hero/team-meeting.webp"
+          alt=""
+          width={168}
+          height={224}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 rotate-6 w-[34%] max-w-[150px] aspect-[3/4] overflow-hidden rounded-2xl shadow-lg shadow-blue-950/30 ring-1 ring-white/25">
+        <img
+          src="/hero/laptop-work.webp"
+          alt=""
+          width={168}
+          height={224}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Center phone */}
+      <div className="relative z-10 -rotate-6 w-[46%] max-w-[190px] aspect-[208/424] rounded-[2.2rem] bg-slate-950 p-2 shadow-2xl shadow-blue-950/50 ring-1 ring-white/20">
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 rounded-b-2xl bg-slate-950 z-10" />
+        <div className="relative h-full w-full overflow-hidden rounded-[1.7rem] bg-gradient-to-b from-blue-600 to-blue-800 flex flex-col items-center justify-center">
+          <div className="w-16 h-16 rounded-2xl bg-white/95 flex items-center justify-center shadow-lg">
+            <span className="font-display text-2xl font-extrabold text-blue-700">W</span>
+          </div>
+          <span className="mt-4 font-display text-sm font-medium text-white/90 tracking-wide">Web Design</span>
+          <span className="text-[10px] text-white/60 tracking-widest">KAGOSHIMA</span>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function PhotoRing() {
   const count = ringPhotos.length
