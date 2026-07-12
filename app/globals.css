@@ -133,6 +133,45 @@
   }
 }
 
+/* 3D rotating photo ring (hero) */
+.photo-ring-scene {
+  perspective: 1400px;
+}
+.photo-ring {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: ringSpin 26s linear infinite;
+}
+.photo-ring-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+/* Counter-rotate photos so their faces stay upright while orbiting */
+.photo-ring-face {
+  animation: ringSpinCounter 26s linear infinite;
+}
+@keyframes ringSpin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+@keyframes ringSpinCounter {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-360deg);
+  }
+}
+
 @layer utilities {
   .animation-delay-2000 {
     animation-delay: 2s;

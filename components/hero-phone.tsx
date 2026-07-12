@@ -68,17 +68,17 @@ export function HeroPhone() {
         </span>
       </motion.div>
 
-      {/* Floating photo collage - desktop */}
+      {/* Rotating 3D photo ring - desktop (right side) */}
       <motion.div
         style={{ y: photosY, x: photosPX, translateY: photosPY }}
-        className="absolute inset-0 z-[1] hidden md:block"
+        className="absolute inset-y-0 right-0 z-[1] hidden lg:block w-[48%] xl:w-[46%]"
       >
-        <PhotoCollage />
+        <PhotoRing />
       </motion.div>
 
       {/* Foreground copy */}
       <div className="container relative z-10 min-h-screen flex flex-col justify-center py-32">
-        <motion.div style={{ y: copyY, opacity: copyOpacity, x: copyPX }} className="max-w-3xl">
+        <motion.div style={{ y: copyY, opacity: copyOpacity, x: copyPX }} className="max-w-3xl lg:max-w-xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -193,43 +193,70 @@ export function HeroPhone() {
 
 const mobilePhotos = ["/hero/handshake.png", "/hero/team-meeting.png", "/hero/designer.png"]
 
-function PhotoCollage() {
-  const photos = [
-    {
-      src: "/hero/handshake.png",
-      className: "top-[12%] right-[26%] w-44 lg:w-52 rotate-[-8deg]",
-      delay: 0.2,
-    },
-    {
-      src: "/hero/team-meeting.png",
-      className: "top-[30%] right-[4%] w-52 lg:w-64 rotate-[6deg]",
-      delay: 0.35,
-    },
-    {
-      src: "/hero/designer.png",
-      className: "bottom-[10%] right-[22%] w-48 lg:w-56 rotate-[-4deg]",
-      delay: 0.5,
-    },
-  ]
+const ringPhotos = [
+  "/hero/team-meeting.png",
+  "/hero/designer.png",
+  "/hero/office.png",
+  "/hero/laptop-work.png",
+  "/hero/meeting-2.png",
+  "/hero/handshake.png",
+]
+
+function PhotoRing() {
+  const count = ringPhotos.length
+  // Radius of the orbit in px
+  const radius = 260
 
   return (
-    <div className="relative h-full w-full">
-      {photos.map((p) => (
+    <div className="photo-ring-scene relative h-full w-full flex items-center justify-center">
+      {/* Center standing phone */}
+      <motion.div
+        initial={{ opacity: 0, y: 40, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.9, delay: 0.2 }}
+        className="relative z-20"
+      >
         <motion.div
-          key={p.src}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: p.delay }}
-          className={`absolute overflow-hidden rounded-2xl shadow-2xl shadow-blue-950/40 ring-1 ring-white/20 ${p.className}`}
+          animate={{ y: [0, -14, 0] }}
+          transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+          className="relative w-[168px] h-[344px] rounded-[2.2rem] bg-slate-950 p-2 shadow-2xl shadow-blue-950/50 ring-1 ring-white/20"
         >
-          <motion.div
-            animate={{ y: [0, -12, 0] }}
-            transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: p.delay }}
-          >
-            <img src={p.src || "/placeholder.svg"} alt="" className="w-full aspect-[3/4] object-cover" />
-          </motion.div>
+          {/* notch */}
+          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 rounded-b-2xl bg-slate-950 z-10" />
+          <div className="relative h-full w-full overflow-hidden rounded-[1.7rem] bg-gradient-to-b from-blue-600 to-blue-800 flex flex-col items-center justify-center">
+            <div className="w-16 h-16 rounded-2xl bg-white/95 flex items-center justify-center shadow-lg">
+              <span className="font-display text-2xl font-extrabold text-blue-700">W</span>
+            </div>
+            <span className="mt-4 font-display text-sm font-medium text-white/90 tracking-wide">
+              Web Design
+            </span>
+            <span className="text-xs text-white/60 tracking-widest">KAGOSHIMA</span>
+          </div>
         </motion.div>
-      ))}
+      </motion.div>
+
+      {/* Orbiting photo ring */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="photo-ring w-0 h-0">
+          {ringPhotos.map((src, i) => {
+            const angle = (360 / count) * i
+            return (
+              <div
+                key={src}
+                className="photo-ring-item"
+                style={{ transform: `rotateY(${angle}deg) translateZ(${radius}px)` }}
+              >
+                <div
+                  className="photo-ring-face overflow-hidden rounded-xl shadow-2xl shadow-blue-950/40 ring-1 ring-white/25"
+                  style={{ width: 150, height: 200, marginLeft: -75, marginTop: -100 }}
+                >
+                  <img src={src || "/placeholder.svg"} alt="" className="w-full h-full object-cover" />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }
