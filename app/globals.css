@@ -144,16 +144,27 @@
   left: 0;
   transform-style: preserve-3d;
 }
-.photo-ring-face {
-  transform: translateZ(0);
-}
-.phone-center {
-  transform-style: preserve-3d;
-}
 /* Photos face radially outward and stay visible all the way around the ring,
    passing in front of and behind the phone for a full rotation */
 .photo-ring-face {
   backface-visibility: visible;
+}
+.phone-center {
+  transform-style: preserve-3d;
+}
+/* GPU-composited phone float (kept off the main thread) */
+.phone-float {
+  animation: phoneFloat 5s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes phoneFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
 }
 @keyframes ringSpin {
   from {
@@ -166,6 +177,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .photo-ring,
+  .phone-float,
   .btn-shine::after {
     animation: none;
   }

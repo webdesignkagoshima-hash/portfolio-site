@@ -28,11 +28,11 @@ export function HeroPhone() {
       ref={sectionRef}
       className="animate-hero-gradient relative min-h-screen overflow-hidden flex items-center pt-8 pb-8 lg:py-0"
     >
-      {/* Soft light glows (static - animating blurred elements repaints every
-          frame and is the main cause of jank on mobile) */}
+      {/* Soft light glows (static, no blend mode - blend compositing behind the
+          rotating ring is a major cause of jank on mobile) */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute -top-24 -left-24 w-[28rem] h-[28rem] bg-white rounded-full mix-blend-overlay blur-3xl opacity-25" />
-        <div className="absolute -bottom-16 -right-16 w-[26rem] h-[26rem] bg-cyan-200 rounded-full mix-blend-overlay blur-3xl opacity-30" />
+        <div className="absolute -top-24 -left-24 w-[28rem] h-[28rem] bg-white/15 rounded-full blur-3xl" />
+        <div className="absolute -bottom-16 -right-16 w-[26rem] h-[26rem] bg-cyan-300/20 rounded-full blur-3xl" />
       </div>
 
       {/* Oversized thin wordmark background */}
@@ -154,12 +154,12 @@ export function HeroPhone() {
 }
 
 const ringPhotos = [
-  "/hero/team-meeting.png",
-  "/hero/designer.png",
-  "/hero/office.png",
-  "/hero/laptop-work.png",
-  "/hero/meeting-2.png",
-  "/hero/handshake.png",
+  "/hero/team-meeting.webp",
+  "/hero/designer.webp",
+  "/hero/office.webp",
+  "/hero/laptop-work.webp",
+  "/hero/meeting-2.webp",
+  "/hero/handshake.webp",
 ]
 
 function PhotoRing() {
@@ -199,28 +199,24 @@ function PhotoRing() {
           })}
         </div>
 
-        {/* Center tilted phone */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1, y: [0, -14, 0] }}
-          transition={{
-            opacity: { duration: 0.9, delay: 0.2 },
-            scale: { duration: 0.9, delay: 0.2 },
-            y: { duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" },
-          }}
-          style={{ rotateZ: -10, rotateY: -12, translateZ: 0 }}
-          className="phone-center absolute top-1/2 left-1/2 -ml-[104px] -mt-[212px] w-[208px] h-[424px] rounded-[2.6rem] bg-slate-950 p-2.5 shadow-2xl shadow-blue-950/50 ring-1 ring-white/20"
+        {/* Center tilted phone (static 3D transform; float runs via CSS on the
+            compositor so it stays smooth on mobile) */}
+        <div
+          style={{ transform: "rotateZ(-10deg) rotateY(-12deg) translateZ(0)" }}
+          className="phone-center absolute top-1/2 left-1/2 -ml-[104px] -mt-[212px] w-[208px] h-[424px]"
         >
-          {/* notch */}
-          <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-20 h-6 rounded-b-2xl bg-slate-950 z-10" />
-          <div className="relative h-full w-full overflow-hidden rounded-[2rem] bg-gradient-to-b from-blue-600 to-blue-800 flex flex-col items-center justify-center">
-            <div className="w-20 h-20 rounded-3xl bg-white/95 flex items-center justify-center shadow-lg">
-              <span className="font-display text-3xl font-extrabold text-blue-700">W</span>
+          <div className="phone-float h-full w-full rounded-[2.6rem] bg-slate-950 p-2.5 shadow-2xl shadow-blue-950/50 ring-1 ring-white/20">
+            {/* notch */}
+            <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-20 h-6 rounded-b-2xl bg-slate-950 z-10" />
+            <div className="relative h-full w-full overflow-hidden rounded-[2rem] bg-gradient-to-b from-blue-600 to-blue-800 flex flex-col items-center justify-center">
+              <div className="w-20 h-20 rounded-3xl bg-white/95 flex items-center justify-center shadow-lg">
+                <span className="font-display text-3xl font-extrabold text-blue-700">W</span>
+              </div>
+              <span className="mt-5 font-display text-base font-medium text-white/90 tracking-wide">Web Design</span>
+              <span className="text-xs text-white/60 tracking-widest">KAGOSHIMA</span>
             </div>
-            <span className="mt-5 font-display text-base font-medium text-white/90 tracking-wide">Web Design</span>
-            <span className="text-xs text-white/60 tracking-widest">KAGOSHIMA</span>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   )
