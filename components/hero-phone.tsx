@@ -2,7 +2,7 @@
 
 import { useRef } from "react"
 import Link from "next/link"
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion"
+import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -23,27 +23,8 @@ export function HeroPhone() {
   const photosY = useTransform(smooth, [0, 1], [0, -120])
   const bgTextY = useTransform(smooth, [0, 1], [0, 160])
 
-  // Mouse parallax
-  const mx = useMotionValue(0)
-  const my = useMotionValue(0)
-  const smx = useSpring(mx, { stiffness: 60, damping: 18 })
-  const smy = useSpring(my, { stiffness: 60, damping: 18 })
-  const photosPX = useTransform(smx, [-0.5, 0.5], [24, -24])
-  const photosPY = useTransform(smy, [-0.5, 0.5], [24, -24])
-  const copyPX = useTransform(smx, [-0.5, 0.5], [-10, 10])
-
-  function handleMouseMove(e: React.MouseEvent) {
-    const rect = e.currentTarget.getBoundingClientRect()
-    mx.set((e.clientX - rect.left) / rect.width - 0.5)
-    my.set((e.clientY - rect.top) / rect.height - 0.5)
-  }
-
   return (
-    <section
-      ref={sectionRef}
-      onMouseMove={handleMouseMove}
-      className="animate-hero-gradient relative min-h-screen overflow-hidden"
-    >
+    <section ref={sectionRef} className="animate-hero-gradient relative min-h-screen overflow-hidden">
       {/* Soft floating light glows */}
       <div className="absolute inset-0 z-0">
         <motion.div
@@ -70,7 +51,7 @@ export function HeroPhone() {
 
       {/* Rotating 3D photo ring - desktop (right side) */}
       <motion.div
-        style={{ y: photosY, x: photosPX, translateY: photosPY }}
+        style={{ y: photosY }}
         className="absolute inset-y-0 right-0 z-[1] hidden lg:block w-[48%] xl:w-[46%]"
       >
         <PhotoRing />
@@ -78,7 +59,7 @@ export function HeroPhone() {
 
       {/* Foreground copy */}
       <div className="container relative z-10 min-h-screen flex flex-col justify-center py-32">
-        <motion.div style={{ y: copyY, opacity: copyOpacity, x: copyPX }} className="max-w-3xl lg:max-w-xl">
+        <motion.div style={{ y: copyY, opacity: copyOpacity }} className="max-w-3xl lg:max-w-xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -89,26 +70,15 @@ export function HeroPhone() {
             <span className="text-sm font-medium text-white tracking-wide">鹿児島発・全国対応のデジタルパートナー</span>
           </motion.div>
 
-          {/* Brand wordmark */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.05 }}
-            className="font-display text-base md:text-lg font-medium text-white/90 tracking-wide mb-4"
-          >
-            ウェブデザイン鹿児島
-          </motion.div>
-
           {/* Main headline */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="font-display font-extrabold tracking-tight text-white leading-[1.08] text-balance text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
+            className="font-display font-extrabold tracking-tight text-white leading-[1.14] text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
           >
-            Web、集客、採用の
-            <br />
-            可能性を。
+            <span className="block whitespace-nowrap">Web、集客、採用の</span>
+            <span className="block">可能性を。</span>
           </motion.h1>
 
           {/* Sub English line */}
@@ -205,39 +175,15 @@ const ringPhotos = [
 function PhotoRing() {
   const count = ringPhotos.length
   // Radius of the orbit in px
-  const radius = 260
+  const radius = 250
 
   return (
     <div className="photo-ring-scene relative h-full w-full flex items-center justify-center">
-      {/* Center standing phone */}
-      <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.9 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.9, delay: 0.2 }}
-        className="relative z-20"
-      >
-        <motion.div
-          animate={{ y: [0, -14, 0] }}
-          transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-          className="relative w-[168px] h-[344px] rounded-[2.2rem] bg-slate-950 p-2 shadow-2xl shadow-blue-950/50 ring-1 ring-white/20"
-        >
-          {/* notch */}
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 rounded-b-2xl bg-slate-950 z-10" />
-          <div className="relative h-full w-full overflow-hidden rounded-[1.7rem] bg-gradient-to-b from-blue-600 to-blue-800 flex flex-col items-center justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-white/95 flex items-center justify-center shadow-lg">
-              <span className="font-display text-2xl font-extrabold text-blue-700">W</span>
-            </div>
-            <span className="mt-4 font-display text-sm font-medium text-white/90 tracking-wide">
-              Web Design
-            </span>
-            <span className="text-xs text-white/60 tracking-widest">KAGOSHIMA</span>
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* Orbiting photo ring */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="photo-ring w-0 h-0">
+      {/* Shared 3D space: phone + orbiting photos are siblings so the browser
+          depth-sorts photos in front of and behind the phone */}
+      <div className="ring-space relative">
+        {/* Orbiting photo ring */}
+        <div className="photo-ring">
           {ringPhotos.map((src, i) => {
             const angle = (360 / count) * i
             return (
@@ -256,6 +202,29 @@ function PhotoRing() {
             )
           })}
         </div>
+
+        {/* Center tilted phone (sibling of ring, at translateZ 0) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1, y: [0, -14, 0] }}
+          transition={{
+            opacity: { duration: 0.9, delay: 0.2 },
+            scale: { duration: 0.9, delay: 0.2 },
+            y: { duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" },
+          }}
+          style={{ rotateZ: -10, rotateY: -12, translateZ: 0 }}
+          className="phone-center absolute top-1/2 left-1/2 -ml-[84px] -mt-[172px] w-[168px] h-[344px] rounded-[2.2rem] bg-slate-950 p-2 shadow-2xl shadow-blue-950/50 ring-1 ring-white/20"
+        >
+          {/* notch */}
+          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 rounded-b-2xl bg-slate-950 z-10" />
+          <div className="relative h-full w-full overflow-hidden rounded-[1.7rem] bg-gradient-to-b from-blue-600 to-blue-800 flex flex-col items-center justify-center">
+            <div className="w-16 h-16 rounded-2xl bg-white/95 flex items-center justify-center shadow-lg">
+              <span className="font-display text-2xl font-extrabold text-blue-700">W</span>
+            </div>
+            <span className="mt-4 font-display text-sm font-medium text-white/90 tracking-wide">Web Design</span>
+            <span className="text-xs text-white/60 tracking-widest">KAGOSHIMA</span>
+          </div>
+        </motion.div>
       </div>
     </div>
   )

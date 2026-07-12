@@ -135,21 +135,29 @@
 
 /* 3D rotating photo ring (hero) */
 .photo-ring-scene {
-  perspective: 1400px;
+  perspective: 1500px;
+}
+/* Shared 3D context so the phone and photos depth-sort together */
+.ring-space {
+  width: 1px;
+  height: 1px;
+  transform-style: preserve-3d;
 }
 .photo-ring {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   transform-style: preserve-3d;
-  animation: ringSpin 26s linear infinite;
+  animation: ringSpin 30s linear infinite;
 }
 .photo-ring-item {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
   transform-style: preserve-3d;
-  backface-visibility: hidden;
+}
+.phone-center {
+  transform-style: preserve-3d;
 }
 /* Counter-rotate photos so their faces stay upright while orbiting */
 .photo-ring-face {
