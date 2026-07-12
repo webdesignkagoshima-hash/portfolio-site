@@ -85,23 +85,10 @@
   letter-spacing: 0.06em;
 }
 
-/* Animated hero gradient */
+/* Hero gradient (static for performance; animating background-position
+   forces a full-screen repaint every frame and janks on mobile) */
 .animate-hero-gradient {
-  background: linear-gradient(135deg, #0b4fd6 0%, #1e7bf0 35%, #39b6f5 65%, #0b4fd6 100%);
-  background-size: 300% 300%;
-  animation: heroGradient 14s ease infinite;
-}
-
-@keyframes heroGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  background: linear-gradient(135deg, #0b4fd6 0%, #1e7bf0 40%, #39b6f5 100%);
 }
 
 /* Shine sweep for CTA buttons */
@@ -148,13 +135,17 @@
   top: 0;
   left: 0;
   transform-style: preserve-3d;
-  animation: ringSpin 30s linear infinite;
+  animation: ringSpin 34s linear infinite;
+  will-change: transform;
 }
 .photo-ring-item {
   position: absolute;
   top: 0;
   left: 0;
   transform-style: preserve-3d;
+}
+.photo-ring-face {
+  transform: translateZ(0);
 }
 .phone-center {
   transform-style: preserve-3d;
@@ -170,6 +161,13 @@
   }
   to {
     transform: rotateY(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-ring,
+  .btn-shine::after {
+    animation: none;
   }
 }
 

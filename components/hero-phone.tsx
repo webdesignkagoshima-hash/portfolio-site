@@ -28,18 +28,11 @@ export function HeroPhone() {
       ref={sectionRef}
       className="animate-hero-gradient relative min-h-screen overflow-hidden flex items-center pt-8 pb-8 lg:py-0"
     >
-      {/* Soft floating light glows */}
+      {/* Soft light glows (static - animating blurred elements repaints every
+          frame and is the main cause of jank on mobile) */}
       <div className="absolute inset-0 z-0">
-        <motion.div
-          className="absolute -top-24 -left-24 w-[32rem] h-[32rem] bg-white rounded-full mix-blend-overlay filter blur-[130px] opacity-30"
-          animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
-          transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-cyan-200 rounded-full mix-blend-overlay filter blur-[130px] opacity-40"
-          animate={{ x: [0, -50, 0], y: [0, -30, 0] }}
-          transition={{ duration: 15, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-        />
+        <div className="absolute -top-24 -left-24 w-[28rem] h-[28rem] bg-white rounded-full mix-blend-overlay blur-3xl opacity-25" />
+        <div className="absolute -bottom-16 -right-16 w-[26rem] h-[26rem] bg-cyan-200 rounded-full mix-blend-overlay blur-3xl opacity-30" />
       </div>
 
       {/* Oversized thin wordmark background */}
@@ -188,10 +181,18 @@ function PhotoRing() {
                 style={{ transform: `rotateY(${angle}deg) translateZ(${radius}px)` }}
               >
                 <div
-                  className="photo-ring-face overflow-hidden rounded-xl shadow-2xl shadow-blue-950/40 ring-1 ring-white/25"
+                  className="photo-ring-face overflow-hidden rounded-xl shadow-lg shadow-blue-950/30 ring-1 ring-white/25"
                   style={{ width: 168, height: 224, marginLeft: -84, marginTop: -112 }}
                 >
-                  <img src={src || "/placeholder.svg"} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={src || "/placeholder.svg"}
+                    alt=""
+                    width={168}
+                    height={224}
+                    decoding="async"
+                    draggable={false}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
             )
