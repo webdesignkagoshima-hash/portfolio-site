@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Menu, X } from "lucide-react"
+import { Menu, X, ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { useMobile } from "@/hooks/use-mobile"
@@ -84,9 +84,12 @@ export function FloatingNav() {
                 <Button
                   asChild
                   size="sm"
-                  className="btn-shine ml-2 rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 border-0 font-bold whitespace-nowrap shrink-0"
+                  className="btn-shine group ml-2 rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 border-0 font-bold whitespace-nowrap shrink-0 px-5"
                 >
-                  <Link href="#contact">無料相談はこちら</Link>
+                  <Link href="#contact">
+                    無料相談はこちら
+                    <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </Button>
               </div>
             </div>

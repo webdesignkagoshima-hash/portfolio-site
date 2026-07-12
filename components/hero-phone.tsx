@@ -17,14 +17,17 @@ export function HeroPhone() {
 
   const smooth = useSpring(scrollYProgress, { stiffness: 80, damping: 20 })
 
-  // Parallax layers (scroll)
-  const copyY = useTransform(smooth, [0, 1], [0, 80])
+  // Parallax layers (scroll only)
+  const copyY = useTransform(smooth, [0, 1], [0, 60])
   const copyOpacity = useTransform(smooth, [0, 0.7], [1, 0])
-  const photosY = useTransform(smooth, [0, 1], [0, -120])
-  const bgTextY = useTransform(smooth, [0, 1], [0, 160])
+  const photosY = useTransform(smooth, [0, 1], [0, -80])
+  const bgTextY = useTransform(smooth, [0, 1], [0, 120])
 
   return (
-    <section ref={sectionRef} className="animate-hero-gradient relative min-h-screen overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="animate-hero-gradient relative min-h-screen overflow-hidden flex items-center pt-16 pb-8 lg:py-0"
+    >
       {/* Soft floating light glows */}
       <div className="absolute inset-0 z-0">
         <motion.div
@@ -42,113 +45,109 @@ export function HeroPhone() {
       {/* Oversized thin wordmark background */}
       <motion.div
         style={{ y: bgTextY }}
-        className="pointer-events-none absolute inset-x-0 bottom-6 md:bottom-10 z-0 text-center select-none"
+        className="pointer-events-none absolute inset-x-0 bottom-4 md:bottom-8 z-0 text-center select-none"
       >
-        <span className="font-display block font-light tracking-display text-white/10 leading-none text-[22vw] md:text-[16vw]">
+        <span className="font-display block font-light tracking-display text-white/10 leading-none text-[22vw] md:text-[15vw]">
           DIGITAL
         </span>
       </motion.div>
 
-      {/* Rotating 3D photo ring - desktop (right side) */}
-      <motion.div
-        style={{ y: photosY }}
-        className="absolute inset-y-0 right-0 z-[1] hidden lg:block w-[48%] xl:w-[46%]"
-      >
-        <PhotoRing />
-      </motion.div>
-
-      {/* Foreground copy */}
-      <div className="container relative z-10 min-h-screen flex flex-col justify-center py-32">
-        <motion.div style={{ y: copyY, opacity: copyOpacity }} className="max-w-3xl lg:max-w-xl">
+      {/* Content grid */}
+      <div className="container relative z-10 w-full">
+        <div className="grid lg:grid-cols-2 gap-3 lg:gap-4 items-center">
+          {/* Copy */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 border border-white/30 backdrop-blur-sm mb-6"
+            style={{ y: copyY, opacity: copyOpacity }}
+            className="order-2 lg:order-1 text-center lg:text-left flex flex-col items-center lg:items-start"
           >
-            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-            <span className="text-sm font-medium text-white tracking-wide">鹿児島発・全国対応のデジタルパートナー</span>
-          </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 border border-white/30 backdrop-blur-sm mb-5"
+            >
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              <span className="text-xs sm:text-sm font-medium text-white tracking-wide">
+                鹿児島発・全国対応のデジタルパートナー
+              </span>
+            </motion.div>
 
-          {/* Main headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="font-display font-extrabold tracking-tight text-white leading-[1.14] text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
-          >
-            <span className="block whitespace-nowrap">Web、集客、採用の</span>
-            <span className="block">可能性を。</span>
-          </motion.h1>
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="font-display font-extrabold tracking-tight text-white leading-[1.14] text-4xl sm:text-5xl lg:text-6xl xl:text-7xl"
+            >
+              <span className="block whitespace-nowrap">Web、集客、採用の</span>
+              <span className="block">可能性を。</span>
+            </motion.h1>
 
-          {/* Sub English line */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-display mt-4 text-lg md:text-2xl font-light tracking-display text-white/70"
-          >
-            Creative Digital Partner.
-          </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="font-display mt-3 text-base sm:text-xl lg:text-2xl font-light tracking-display text-white/70"
+            >
+              Creative Digital Partner.
+            </motion.p>
 
-          {/* Mobile photo collage */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.35 }}
-            className="mt-8 flex gap-3 md:hidden"
-          >
-            {mobilePhotos.map((src, i) => (
-              <motion.div
-                key={src}
-                animate={{ y: [0, i % 2 === 0 ? -8 : 8, 0] }}
-                transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: i * 0.4 }}
-                className="flex-1 overflow-hidden rounded-2xl shadow-xl shadow-blue-950/30 ring-1 ring-white/20"
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-4 text-sm md:text-base text-white/75 max-w-md leading-relaxed"
+            >
+              Web制作・広告運用・SNS運用・採用支援まで。企業ごとの課題に合わせた最適な施策を設計し、成果につながる仕組みづくりを支援します。
+            </motion.p>
+
+            {/* CTAs - centered, equal size */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-6 flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-center justify-center lg:justify-start"
+            >
+              <Button
+                asChild
+                size="lg"
+                className="btn-shine group rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 border-0 font-bold shadow-lg shadow-amber-500/30 w-full sm:w-56"
               >
-                <img src={src || "/placeholder.svg"} alt="" className="w-full aspect-[3/4] object-cover" />
-              </motion.div>
-            ))}
+                <Link href="#contact">
+                  無料相談はこちら
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="group rounded-full border-white/50 text-white hover:bg-white/10 hover:text-white bg-transparent w-full sm:w-56"
+              >
+                <Link href="#works">
+                  実績を見る
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </motion.div>
           </motion.div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-6 text-sm md:text-base text-white/75 max-w-xl leading-loose"
-          >
-            Web制作・広告運用・SNS運用・採用支援まで。企業ごとの課題に合わせた最適な施策を設計し、成果につながる仕組みづくりを支援します。
-          </motion.p>
-
+          {/* Rotating 3D photo ring */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-10 flex flex-wrap gap-4"
+            style={{ y: photosY }}
+            className="order-1 lg:order-2 relative h-[220px] sm:h-[340px] lg:h-[560px]"
           >
-            <Button
-              asChild
-              size="lg"
-              className="btn-shine group rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 border-0 px-8 font-bold shadow-lg shadow-amber-500/30"
-            >
-              <Link href="#contact">
-                無料相談はこちら
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="rounded-full border-white/50 text-white hover:bg-white/10 hover:text-white bg-transparent px-8"
-            >
-              <Link href="#works">実績を見る</Link>
-            </Button>
+            <div className="scale-[0.46] sm:scale-[0.7] lg:scale-100 h-full w-full">
+              <PhotoRing />
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll cue */}
-      <motion.div style={{ opacity: copyOpacity }} className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+      <motion.div
+        style={{ opacity: copyOpacity }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden sm:block"
+      >
         <div className="w-6 h-10 rounded-full border-2 border-white/40 flex justify-center items-start p-1">
           <motion.div
             className="w-1.5 h-1.5 rounded-full bg-white"
@@ -161,8 +160,6 @@ export function HeroPhone() {
   )
 }
 
-const mobilePhotos = ["/hero/handshake.png", "/hero/team-meeting.png", "/hero/designer.png"]
-
 const ringPhotos = [
   "/hero/team-meeting.png",
   "/hero/designer.png",
@@ -174,13 +171,11 @@ const ringPhotos = [
 
 function PhotoRing() {
   const count = ringPhotos.length
-  // Radius of the orbit in px
-  const radius = 250
+  const radius = 300
 
   return (
     <div className="photo-ring-scene relative h-full w-full flex items-center justify-center">
-      {/* Shared 3D space: phone + orbiting photos are siblings so the browser
-          depth-sorts photos in front of and behind the phone */}
+      {/* Shared 3D space so the phone and photos depth-sort together */}
       <div className="ring-space relative">
         {/* Orbiting photo ring */}
         <div className="photo-ring">
@@ -194,7 +189,7 @@ function PhotoRing() {
               >
                 <div
                   className="photo-ring-face overflow-hidden rounded-xl shadow-2xl shadow-blue-950/40 ring-1 ring-white/25"
-                  style={{ width: 150, height: 200, marginLeft: -75, marginTop: -100 }}
+                  style={{ width: 168, height: 224, marginLeft: -84, marginTop: -112 }}
                 >
                   <img src={src || "/placeholder.svg"} alt="" className="w-full h-full object-cover" />
                 </div>
@@ -203,7 +198,7 @@ function PhotoRing() {
           })}
         </div>
 
-        {/* Center tilted phone (sibling of ring, at translateZ 0) */}
+        {/* Center tilted phone */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1, y: [0, -14, 0] }}
@@ -213,15 +208,15 @@ function PhotoRing() {
             y: { duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" },
           }}
           style={{ rotateZ: -10, rotateY: -12, translateZ: 0 }}
-          className="phone-center absolute top-1/2 left-1/2 -ml-[84px] -mt-[172px] w-[168px] h-[344px] rounded-[2.2rem] bg-slate-950 p-2 shadow-2xl shadow-blue-950/50 ring-1 ring-white/20"
+          className="phone-center absolute top-1/2 left-1/2 -ml-[104px] -mt-[212px] w-[208px] h-[424px] rounded-[2.6rem] bg-slate-950 p-2.5 shadow-2xl shadow-blue-950/50 ring-1 ring-white/20"
         >
           {/* notch */}
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 rounded-b-2xl bg-slate-950 z-10" />
-          <div className="relative h-full w-full overflow-hidden rounded-[1.7rem] bg-gradient-to-b from-blue-600 to-blue-800 flex flex-col items-center justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-white/95 flex items-center justify-center shadow-lg">
-              <span className="font-display text-2xl font-extrabold text-blue-700">W</span>
+          <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-20 h-6 rounded-b-2xl bg-slate-950 z-10" />
+          <div className="relative h-full w-full overflow-hidden rounded-[2rem] bg-gradient-to-b from-blue-600 to-blue-800 flex flex-col items-center justify-center">
+            <div className="w-20 h-20 rounded-3xl bg-white/95 flex items-center justify-center shadow-lg">
+              <span className="font-display text-3xl font-extrabold text-blue-700">W</span>
             </div>
-            <span className="mt-4 font-display text-sm font-medium text-white/90 tracking-wide">Web Design</span>
+            <span className="mt-5 font-display text-base font-medium text-white/90 tracking-wide">Web Design</span>
             <span className="text-xs text-white/60 tracking-widest">KAGOSHIMA</span>
           </div>
         </motion.div>

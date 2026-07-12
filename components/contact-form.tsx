@@ -111,20 +111,22 @@ export function ContactForm() {
             />
           </div>
 
-          <Button
-            type="submit"
-            size="lg"
-            className="btn-shine w-full rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 border-0 font-bold"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <>送信中...</>
-            ) : (
-              <>
-                無料相談を送信する <Send className="ml-2 h-4 w-4" />
-              </>
-            )}
-          </Button>
+          <div className="flex justify-center pt-2">
+            <Button
+              type="submit"
+              size="lg"
+              className="btn-shine rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 border-0 font-bold px-10"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>送信中...</>
+              ) : (
+                <>
+                  無料相談を送信する <Send className="ml-2 h-4 w-4" />
+                </>
+              )}
+            </Button>
+          </div>
         </form>
       </div>
     </motion.div>

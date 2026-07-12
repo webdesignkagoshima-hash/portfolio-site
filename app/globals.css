@@ -159,9 +159,9 @@
 .phone-center {
   transform-style: preserve-3d;
 }
-/* Counter-rotate photos so their faces stay upright while orbiting */
+/* Photos face radially outward, so the one at the front faces the viewer */
 .photo-ring-face {
-  animation: ringSpinCounter 26s linear infinite;
+  backface-visibility: hidden;
 }
 @keyframes ringSpin {
   from {
@@ -169,14 +169,6 @@
   }
   to {
     transform: rotateY(360deg);
-  }
-}
-@keyframes ringSpinCounter {
-  from {
-    transform: rotateY(0deg);
-  }
-  to {
-    transform: rotateY(-360deg);
   }
 }
 
