@@ -159,9 +159,10 @@
 .phone-center {
   transform-style: preserve-3d;
 }
-/* Photos face radially outward, so the one at the front faces the viewer */
+/* Photos face radially outward and stay visible all the way around the ring,
+   passing in front of and behind the phone for a full rotation */
 .photo-ring-face {
-  backface-visibility: hidden;
+  backface-visibility: visible;
 }
 @keyframes ringSpin {
   from {

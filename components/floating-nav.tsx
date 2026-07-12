@@ -118,10 +118,12 @@ export function FloatingNav() {
             ))}
             <Button
               asChild
-              className="mt-6 rounded-full bg-gradient-to-r from-blue-600 to-sky-400 hover:from-blue-700 hover:to-sky-500 border-0 text-white"
+              size="lg"
+              className="btn-shine group mt-6 rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 border-0 font-bold shadow-lg shadow-amber-500/30"
             >
               <Link href="#contact" onClick={handleNavClick}>
                 無料相談はこちら
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
           </div>

@@ -26,7 +26,7 @@ export function HeroPhone() {
   return (
     <section
       ref={sectionRef}
-      className="animate-hero-gradient relative min-h-screen overflow-hidden flex items-center pt-16 pb-8 lg:py-0"
+      className="animate-hero-gradient relative min-h-screen overflow-hidden flex items-center pt-8 pb-8 lg:py-0"
     >
       {/* Soft floating light glows */}
       <div className="absolute inset-0 z-0">
@@ -134,9 +134,9 @@ export function HeroPhone() {
           {/* Rotating 3D photo ring */}
           <motion.div
             style={{ y: photosY }}
-            className="order-1 lg:order-2 relative h-[220px] sm:h-[340px] lg:h-[560px]"
+            className="order-1 lg:order-2 relative h-[320px] sm:h-[420px] lg:h-[560px]"
           >
-            <div className="scale-[0.46] sm:scale-[0.7] lg:scale-100 h-full w-full">
+            <div className="scale-[0.66] sm:scale-[0.82] lg:scale-100 h-full w-full">
               <PhotoRing />
             </div>
           </motion.div>
