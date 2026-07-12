@@ -1,21 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import {
-  Mail,
-  ArrowRight,
-  Megaphone,
-  Palette,
-  Code2,
-  Monitor,
-  TrendingUp,
-  Users,
-  Layers,
-  Target,
-  Zap,
-} from "lucide-react"
+import { Monitor, TrendingUp, Users, Layers, Target, Zap } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import { ContactForm } from "@/components/contact-form"
 import { HeroPhone } from "@/components/hero-phone"
 import { FloatingNav } from "@/components/floating-nav"
@@ -25,24 +12,7 @@ import { SectionHeading } from "@/components/section-heading"
 import { ServiceCard } from "@/components/service-card"
 import { WorkCard } from "@/components/work-card"
 import { CountUp } from "@/components/count-up"
-
-const teamRoles = [
-  {
-    icon: Megaphone,
-    role: "Marketer",
-    desc: "広告運用 / 集客戦略設計 / 分析 / 改善提案",
-  },
-  {
-    icon: Palette,
-    role: "Designer",
-    desc: "Webデザイン / LP制作 / バナー / クリエイティブ制作 / UI設計",
-  },
-  {
-    icon: Code2,
-    role: "Engineer",
-    desc: "フロント実装 / WordPress構築 / ECサイト構築 / 保守 / 更新対応",
-  },
-]
+import { Reveal } from "@/components/reveal"
 
 const strengths = [
   {
@@ -159,24 +129,8 @@ export default function Home() {
             subtitle="Web制作を軸に、集客支援・採用支援まで対応するクリエイティブチームです。マーケター・デザイナー・エンジニアが連携し、企画・制作・運用・改善まで一貫して支援しています。"
           />
 
-          {/* Team roles */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20">
-            {teamRoles.map((t) => (
-              <div
-                key={t.role}
-                className="rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-8 text-center"
-              >
-                <div className="mx-auto w-14 h-14 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                  <t.icon className="h-7 w-7 text-white" />
-                </div>
-                <h3 className="font-display mt-5 text-xl font-semibold text-slate-900">{t.role}</h3>
-                <p className="mt-3 text-sm text-slate-500 leading-loose">{t.desc}</p>
-              </div>
-            ))}
-          </div>
-
           {/* Representative profile + message */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch mt-24">
+          <Reveal className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch mt-20">
             <div className="relative">
               <div className="relative h-full rounded-2xl overflow-hidden shadow-lg shadow-blue-500/10">
                 <img
@@ -206,36 +160,40 @@ export default function Home() {
                 </p>
               </div>
             </div>
-          </div>
+          </Reveal>
 
           {/* Strength */}
-          <div className="mt-24">
-            <h3 className="font-display text-center text-2xl font-semibold text-slate-900 tracking-wide">Strength</h3>
+          <Reveal className="mt-24">
+            <h3 className="font-display text-center text-2xl font-semibold text-slate-900 tracking-wide">選ばれる理由</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-              {strengths.map((s) => (
-                <div
+              {strengths.map((s, i) => (
+                <Reveal
                   key={s.title}
-                  className="rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-8"
+                  delay={i * 0.12}
+                  className="rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-8 text-center"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center">
+                  <div className="mx-auto w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center">
                     <s.icon className="h-6 w-6 text-blue-600" />
                   </div>
                   <h4 className="font-display mt-5 text-lg font-semibold text-slate-900 leading-snug text-balance">
                     {s.title}
                   </h4>
                   <p className="mt-3 text-sm text-slate-500 leading-loose">{s.desc}</p>
-                </div>
+                </Reveal>
               ))}
             </div>
-          </div>
+          </Reveal>
 
           {/* Numbers */}
-          <div className="mt-24">
-            <h3 className="font-display text-center text-2xl font-semibold text-slate-900 tracking-wide">Numbers</h3>
+          <Reveal className="mt-24">
+            <h3 className="font-display text-center text-2xl font-semibold text-slate-900 tracking-wide">
+              数字で見る実績
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-              {numbers.map((n) => (
-                <div
+              {numbers.map((n, i) => (
+                <Reveal
                   key={n.label}
+                  delay={i * 0.12}
                   className="rounded-2xl bg-gradient-to-b from-blue-50 to-white border border-slate-200 p-8 text-center"
                 >
                   <div className="font-display flex items-end justify-center gap-1">
@@ -247,10 +205,10 @@ export default function Home() {
                     <span className="text-lg font-semibold text-blue-500 pb-1">{n.unit}</span>
                   </div>
                   <p className="mt-3 text-sm text-slate-500">{n.label}</p>
-                </div>
+                </Reveal>
               ))}
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -283,20 +241,6 @@ export default function Home() {
               <WorkCard key={w.title} {...w} index={i} />
             ))}
           </div>
-
-          <div className="flex justify-center mt-14">
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="group rounded-full border-blue-200 text-blue-600 hover:text-blue-700 hover:border-blue-400 hover:bg-blue-50 bg-transparent px-8"
-            >
-              <Link href="#works">
-                実績をもっと見る
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -305,33 +249,19 @@ export default function Home() {
         <div className="container relative z-10">
           <SectionHeading title="Contact" subtitle="お気軽にご相談ください" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start mt-20">
-            <div className="space-y-6">
+          <div className="mx-auto max-w-2xl mt-16">
+            <div className="space-y-4 text-center">
               <p className="text-base text-slate-600 leading-loose">
                 Web制作、集客改善、採用支援に関するご相談を承っております。サイト制作のみのご相談はもちろん、広告や導線改善、採用支援まで含めたご相談も可能です。
               </p>
               <p className="text-base text-slate-600 leading-loose">
                 ご相談ベースのお問い合わせも歓迎していますので、課題がまだ整理できていない段階でもお気軽にお問い合わせください。
               </p>
-
-              <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center">
-                    <Mail className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-slate-400">Email</div>
-                    <div className="font-medium text-slate-800">contact@webdesign-kagoshima.jp</div>
-                  </div>
-                </div>
-                <div className="mt-6 pt-6 border-t border-slate-100 flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-sm text-slate-600">新規のご相談を受け付けています</span>
-                </div>
-              </div>
             </div>
 
-            <ContactForm />
+            <div className="mt-10">
+              <ContactForm />
+            </div>
           </div>
         </div>
       </section>

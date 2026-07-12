@@ -43,15 +43,17 @@ export function FloatingNav() {
 
   return (
     <>
-      <motion.div
-        className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[min(92vw,64rem)] ${
+      <div
+        className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[min(92vw,64rem)] transition-opacity duration-300 ${
           isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
-        initial={{ y: -100 }}
-        animate={{ y: isVisible ? 0 : -100 }}
-        transition={{ duration: 0.3 }}
       >
-        <div className="relative px-4 py-3 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200 shadow-lg shadow-slate-900/5">
+        <motion.div
+          className="relative px-4 py-3 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200 shadow-lg shadow-slate-900/5"
+          initial={{ y: -100 }}
+          animate={{ y: isVisible ? 0 : -100 }}
+          transition={{ duration: 0.3 }}
+        >
           {isMobile ? (
             <div className="relative flex items-center justify-between">
               <Logo />
@@ -66,14 +68,14 @@ export function FloatingNav() {
               </Button>
             </div>
           ) : (
-            <div className="relative flex items-center justify-between">
+            <div className="relative flex items-center justify-between gap-4">
               <Logo />
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 shrink-0">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="px-3 py-1 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
+                    className="px-3 py-1 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors whitespace-nowrap"
                     onClick={handleNavClick}
                   >
                     {item.name}
@@ -82,15 +84,15 @@ export function FloatingNav() {
                 <Button
                   asChild
                   size="sm"
-                  className="ml-2 rounded-full bg-gradient-to-r from-blue-600 to-sky-400 hover:from-blue-700 hover:to-sky-500 border-0 text-white"
+                  className="btn-shine ml-2 rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 border-0 font-bold whitespace-nowrap shrink-0"
                 >
                   <Link href="#contact">無料相談はこちら</Link>
                 </Button>
               </div>
             </div>
           )}
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
 
       {/* Mobile menu */}
       {isMobile && (

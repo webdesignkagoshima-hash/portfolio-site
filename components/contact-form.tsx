@@ -48,19 +48,18 @@ export function ContactForm() {
     >
       <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 shadow-sm p-6 md:p-8">
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="space-y-2">
-              <Label htmlFor="company" className="text-slate-700">
-                会社名
-              </Label>
-              <Input id="company" name="company" placeholder="株式会社サンプル" className={inputClass} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="name" className="text-slate-700">
-                お名前 <span className="text-blue-600">*</span>
-              </Label>
-              <Input id="name" name="name" placeholder="山田 太郎" required className={inputClass} />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="company" className="text-slate-700">
+              会社名
+            </Label>
+            <Input id="company" name="company" placeholder="株式会社サンプル" className={inputClass} />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="name" className="text-slate-700">
+              お名前 <span className="text-blue-600">*</span>
+            </Label>
+            <Input id="name" name="name" placeholder="山田 太郎" required className={inputClass} />
           </div>
 
           <div className="space-y-2">
@@ -115,7 +114,7 @@ export function ContactForm() {
           <Button
             type="submit"
             size="lg"
-            className="w-full rounded-full bg-gradient-to-r from-blue-600 to-sky-400 hover:from-blue-700 hover:to-sky-500 border-0 text-white"
+            className="btn-shine w-full rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 border-0 font-bold"
             disabled={isSubmitting}
           >
             {isSubmitting ? (

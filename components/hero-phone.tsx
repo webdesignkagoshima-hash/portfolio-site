@@ -83,22 +83,43 @@ export function HeroPhone() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 border border-white/30 backdrop-blur-sm mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 border border-white/30 backdrop-blur-sm mb-6"
           >
             <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
             <span className="text-sm font-medium text-white tracking-wide">鹿児島発・全国対応のデジタルパートナー</span>
           </motion.div>
 
-          {/* Oversized thin English headline */}
+          {/* Brand wordmark */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.05 }}
+            className="font-display text-base md:text-lg font-medium text-white/90 tracking-wide mb-4"
+          >
+            ウェブデザイン鹿児島
+          </motion.div>
+
+          {/* Main headline */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="font-display font-light tracking-tight text-white leading-[1.02]"
+            className="font-display font-extrabold tracking-tight text-white leading-[1.08] text-balance text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
           >
-            <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white/70">Creative</span>
-            <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl">Digital Partner.</span>
+            Web、集客、採用の
+            <br />
+            可能性を。
           </motion.h1>
+
+          {/* Sub English line */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="font-display mt-4 text-lg md:text-2xl font-light tracking-display text-white/70"
+          >
+            Creative Digital Partner.
+          </motion.p>
 
           {/* Mobile photo collage */}
           <motion.div
@@ -122,17 +143,8 @@ export function HeroPhone() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-8 text-lg md:text-xl font-light text-white/90 tracking-wide"
-          >
-            Web、集客、採用の可能性を。
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-4 text-sm md:text-base text-white/75 max-w-xl leading-loose"
+            className="mt-6 text-sm md:text-base text-white/75 max-w-xl leading-loose"
           >
             Web制作・広告運用・SNS運用・採用支援まで。企業ごとの課題に合わせた最適な施策を設計し、成果につながる仕組みづくりを支援します。
           </motion.p>
@@ -146,7 +158,7 @@ export function HeroPhone() {
             <Button
               asChild
               size="lg"
-              className="group rounded-full bg-white text-blue-700 hover:bg-white/90 border-0 px-8"
+              className="btn-shine group rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 border-0 px-8 font-bold shadow-lg shadow-amber-500/30"
             >
               <Link href="#contact">
                 無料相談はこちら
