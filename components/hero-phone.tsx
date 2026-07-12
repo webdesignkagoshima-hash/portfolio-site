@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 import { ArrowRight } from "lucide-react"
@@ -10,6 +10,18 @@ import { Button } from "@/components/ui/button"
 export function HeroPhone() {
   const sectionRef = useRef<HTMLElement>(null)
 
+  // Scroll-linked parallax updates several transforms (including the heavy 3D
+  // ring) on the main thread every scroll frame, which janks on mobile. Only
+  // enable it on desktop; mobile keeps everything static during scroll.
+  const [enableParallax, setEnableParallax] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px) and (pointer: fine)")
+    const update = () => setEnableParallax(mq.matches)
+    update()
+    mq.addEventListener("change", update)
+    return () => mq.removeEventListener("change", update)
+  }, [])
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -17,7 +29,7 @@ export function HeroPhone() {
 
   const smooth = useSpring(scrollYProgress, { stiffness: 80, damping: 20 })
 
-  // Parallax layers (scroll only)
+  // Parallax layers (scroll only, desktop only)
   const copyY = useTransform(smooth, [0, 1], [0, 60])
   const copyOpacity = useTransform(smooth, [0, 0.7], [1, 0])
   const photosY = useTransform(smooth, [0, 1], [0, -80])
@@ -37,7 +49,7 @@ export function HeroPhone() {
 
       {/* Oversized thin wordmark background */}
       <motion.div
-        style={{ y: bgTextY }}
+        style={enableParallax ? { y: bgTextY } : undefined}
         className="pointer-events-none absolute inset-x-0 bottom-4 md:bottom-8 z-0 text-center select-none"
       >
         <span className="font-display block font-light tracking-display text-white/10 leading-none text-[22vw] md:text-[15vw]">
@@ -50,7 +62,7 @@ export function HeroPhone() {
         <div className="grid lg:grid-cols-2 gap-3 lg:gap-4 items-center">
           {/* Copy */}
           <motion.div
-            style={{ y: copyY, opacity: copyOpacity }}
+            style={enableParallax ? { y: copyY, opacity: copyOpacity } : undefined}
             className="order-2 lg:order-1 text-center lg:text-left flex flex-col items-center lg:items-start"
           >
             <motion.div
@@ -126,7 +138,7 @@ export function HeroPhone() {
 
           {/* Rotating 3D photo ring */}
           <motion.div
-            style={{ y: photosY }}
+            style={enableParallax ? { y: photosY } : undefined}
             className="order-1 lg:order-2 relative h-[320px] sm:h-[420px] lg:h-[560px]"
           >
             <div className="scale-[0.66] sm:scale-[0.82] lg:scale-100 h-full w-full">
@@ -138,7 +150,7 @@ export function HeroPhone() {
 
       {/* Scroll cue */}
       <motion.div
-        style={{ opacity: copyOpacity }}
+        style={enableParallax ? { opacity: copyOpacity } : undefined}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden sm:block"
       >
         <div className="w-6 h-10 rounded-full border-2 border-white/40 flex justify-center items-start p-1">
