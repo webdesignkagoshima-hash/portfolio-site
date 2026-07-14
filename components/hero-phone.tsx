@@ -228,11 +228,11 @@ function PhotoRing({ isMobile }: PhotoRingProps) {
                 }}
               >
                 <div
-                  className={`photo-ring-face overflow-hidden rounded-full ${
-                    isMobile
-                      ? "shadow-md shadow-blue-950/20"
-                      : "shadow-xl shadow-blue-950/30"
-                  }`}
+                  className={`photo-ring-face overflow-hidden rounded-xl ${
+                          isMobile
+                            ? "shadow-md shadow-blue-950/20"
+                            : "shadow-xl shadow-blue-950/30"
+                        }`}
                   style={{
                     width: photoSize,
                     height: photoSize,

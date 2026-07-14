@@ -218,9 +218,13 @@
   will-change: transform;
 }
 
-.photo-ring-item,
+.photo-ring-item {
+  backface-visibility: visible;
+  transform-style: preserve-3d;
+}
+
 .photo-ring-face {
-  backface-visibility: hidden;
+  backface-visibility: visible;
 }
 
 @media (max-width: 767px) {

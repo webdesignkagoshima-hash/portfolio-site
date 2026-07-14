@@ -130,7 +130,7 @@ export function WorkCard({
     >
       <div className="flex min-h-full items-start justify-center py-8 md:py-12">
         <div
-          className="relative w-[85vw] overflow-hidden rounded-xl bg-white shadow-2xl"
+          className="relative w-full w-[85vw] overflow-hidden rounded-xl bg-white shadow-2xl"
           onClick={(event) => event.stopPropagation()}
         >
           <button
@@ -144,9 +144,18 @@ export function WorkCard({
 
           {popupType === "pdf" ? (
   <iframe
-    src={popupImage}
+    src={`${popupImage}#view=FitH&zoom=page-width`}
     title={`${title}のPDF`}
-    className="h-[90vh] w-[90vw] max-w-[1600px] bg-white"
+    className="
+      block
+      h-[78dvh]
+      w-[calc(100vw-2rem)]
+      max-w-full
+      bg-white
+      md:h-[90vh]
+      md:w-[90vw]
+      md:max-w-[1600px]
+    "
   />
 ) : (
   <img
