@@ -1,7 +1,8 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
-import { Monitor, TrendingUp, Users, Layers, Target, Zap } from "lucide-react"
+import { Monitor, TrendingUp, Users } from "lucide-react"
 
 import { ContactForm } from "@/components/contact-form"
 import { HeroPhone } from "@/components/hero-phone"
@@ -16,19 +17,25 @@ import { Reveal } from "@/components/reveal"
 
 const strengths = [
   {
-    icon: Layers,
+    image: "/reason01.png",
     title: "制作から運用改善まで一貫対応",
     desc: "WebサイトやLPの制作だけでなく、広告運用や導線改善まで含めて支援可能です。",
+    width: 180,
+    height: 180,
   },
   {
-    icon: Target,
+    image: "/reason02.png",
     title: "マーケティング視点を踏まえた設計",
     desc: "デザイン性だけでなく、問い合わせ・購入・応募といった成果地点から逆算して設計します。",
+    width: 250,
+    height: 180,
   },
   {
-    icon: Zap,
+    image: "/reason03.png",
     title: "少人数チームによる柔軟かつスピーディーな対応",
     desc: "マーケター・デザイナー・エンジニアが連携し、必要な施策をスピーディーに実行します。",
+    width: 200,
+    height: 150,
   },
 ]
 
@@ -51,6 +58,7 @@ const services = [
       "バナー / クリエイティブ制作",
       "保守 / 更新対応",
     ],
+    price: "LP制作 100,000円～",
   },
   {
     icon: TrendingUp,
@@ -64,6 +72,7 @@ const services = [
       "アクセス解析 / 改善提案",
       "クリエイティブ改善",
     ],
+    price: "広告運用 10％～（クリエイティブ制作込み）※内容によっては別途費用が発生します",
   },
   {
     icon: Users,
@@ -77,37 +86,43 @@ const services = [
       "求人広告 / 応募導線設計",
       "応募率改善 / 採用クリエイティブ制作",
     ],
+    price: "SNS採用 30,000円～",
   },
 ]
 
 const works = [
   {
-    category: "Web制作",
-    title: "キャンプ予約導線を意識したレジャーパークサイトのリニューアル",
-    description: "古くなったサイト構成を見直し、予約導線を意識した情報設計・デザインへ刷新。",
+    category: "LP制作",
+    title: "採用特化SNS運用LPのリニューアル",
+    description: "サービスの特徴である「SNS採用」が十分に訴求できていない、サービス内容が直感的に伝わりづらい部分があり、デザインと訴求を一新。",
     role: "構成 / デザイン / 実装",
-    image: "/works/leisure-park.png",
+    image: "/works/work01.png",
+    popupImage: "/works/work01-2.png",
   },
   {
-    category: "採用支援 / LP制作",
-    title: "採用支援サービスのLP・クリエイティブ制作",
-    description: "採用課題の整理から、訴求設計・LP制作・クリエイティブ改善まで一貫して対応。",
+    category: "LP制作",
+    title: "結婚報告サービスのLP・広告クリエイティブ制作",
+    description: "課題の整理から、訴求設計・LP制作・クリエイティブ改善まで一貫して対応。",
     role: "構成 / デザイン / 実装 / クリエイティブ制作",
-    image: "/works/recruit-lp.png",
+    image: "/works/work02.png",
+    popupImage: "/works/work02-2.png",
   },
   {
-    category: "EC / SEO / 導線改善",
-    title: "ECサイトのSEO・導線改善支援",
-    description: "カテゴリ設計や商品導線、コンテンツ改善を通じて、検索流入と回遊性の改善を実施。",
-    role: "SEO設計 / 導線改善 / コンテンツ設計",
-    image: "/works/ec-seo.png",
+    category: "Webサイト制作",
+    title: "総合レジャーパーク サービスサイト",
+    description: "ユーザーが必要な情報を分かりやすく確認できる情報設計と予約導線を構築することで、キャンプ利用の促進と予約獲得を目的としたサイトへ改善。",
+    role: "構成 / デザイン / 実装",
+    image: "/works/work03.png",
+    popupImage: "/works/work03-2.png",
   },
   {
-    category: "コーポレートサイト制作",
-    title: "コーポレートサイトの新規制作・運用設計",
-    description: "企業情報の整理からサイト設計・実装まで対応し、公開後の更新しやすさも考慮して構築。",
+    category: "広告運用・クリエイティブ制作",
+    title: "Meta広告運用とクリエイティブ制作",
+    description: "キッチン・水回りのリフォーム/マウスピース矯正/精肉通販の広告運用とクリエイティブ制作の実績。",
     role: "構成 / デザイン / WordPress実装",
-    image: "/works/corporate.png",
+    image: "/works/work04.png",
+    popupImage: "/works/work04-2.pdf",
+    popupType: "pdf",
   },
 ]
 
@@ -144,7 +159,7 @@ export default function Home() {
             <div className="flex flex-col gap-6">
               <div className="rounded-2xl bg-slate-50 border border-slate-200 p-8">
                 <span className="text-xs font-medium tracking-[0.2em] text-blue-600">PROFILE</span>
-                <h3 className="font-display mt-2 text-2xl font-semibold text-slate-900">代表 ○○</h3>
+                <h3 className="font-display mt-2 text-2xl font-semibold text-slate-900">迫田 滉樹</h3>
                 <p className="mt-4 text-sm text-slate-600 leading-loose">
                   鹿児島県を拠点に活動するデザイナー / クリエイティブディレクター。広告代理店とデジタルマーケティング会社にて約8年間、Webデザインや広告クリエイティブ制作に従事し、2019年に「ウェブデザイン鹿児島」を開業。現在は地元企業をはじめ、全国の企業に向けてWeb制作、クリエイティブ制作、広告運用、採用支援まで幅広く支援しています。
                 </p>
@@ -172,10 +187,16 @@ export default function Home() {
                   delay={i * 0.12}
                   className="rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-8 text-center"
                 >
-                  <div className="mx-auto w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center">
-                    <s.icon className="h-6 w-6 text-blue-600" />
+                  <div className="mx-auto flex items-center justify-center h-56">
+                    <Image
+                      src={s.image}
+                      alt={s.title}
+                      width={s.width}
+                      height={s.height}
+                      className="object-contain"
+                    />
                   </div>
-                  <h4 className="font-display mt-5 text-lg font-semibold text-slate-900 leading-snug text-balance">
+                  <h4 className="font-display text-lg font-semibold text-slate-900 leading-snug text-balance">
                     {s.title}
                   </h4>
                   <p className="mt-3 text-sm text-slate-500 leading-loose">{s.desc}</p>

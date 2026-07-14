@@ -23,21 +23,44 @@ export function ContactForm() {
     "bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus-visible:border-blue-500 focus-visible:ring-blue-500/20"
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+  e.preventDefault()
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+  const form = e.currentTarget
+  const formData = new FormData(form)
 
-    toast({
-      title: "送信しました",
-      description: "お問い合わせありがとうございます。担当者より折り返しご連絡いたします。",
+  setIsSubmitting(true)
+
+  try {
+    const response = await fetch("https://formspree.io/f/xkodgoba", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Accept: "application/json",
+      },
     })
 
-    setIsSubmitting(false)
-    e.currentTarget.reset()
+    if (!response.ok) {
+      throw new Error("送信失敗")
+    }
+
+toast({
+  title: "お問い合わせを送信しました",
+  description:
+    "お問い合わせありがとうございます。内容を確認のうえ、3営業日以内に担当者よりご連絡いたします。",
+})
+
+    form.reset()
     setCategory("Web制作")
+  } catch (error) {
+    toast({
+      title: "送信できませんでした",
+      description: "時間をおいて再度お試しください。",
+      variant: "destructive",
+    })
+  } finally {
+    setIsSubmitting(false)
   }
+}
 
   return (
     <motion.div

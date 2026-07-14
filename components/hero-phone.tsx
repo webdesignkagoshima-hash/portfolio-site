@@ -14,13 +14,29 @@ export function HeroPhone() {
   // ring) on the main thread every scroll frame, which janks on mobile. Only
   // enable it on desktop; mobile keeps everything static during scroll.
   const [enableParallax, setEnableParallax] = useState(false)
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px) and (pointer: fine)")
-    const update = () => setEnableParallax(mq.matches)
-    update()
-    mq.addEventListener("change", update)
-    return () => mq.removeEventListener("change", update)
-  }, [])
+const [isMobile, setIsMobile] = useState(false)
+
+useEffect(() => {
+  const desktopMq = window.matchMedia(
+    "(min-width: 1024px) and (pointer: fine)",
+  )
+  const mobileMq = window.matchMedia("(max-width: 767px)")
+
+  const update = () => {
+    setEnableParallax(desktopMq.matches)
+    setIsMobile(mobileMq.matches)
+  }
+
+  update()
+
+  desktopMq.addEventListener("change", update)
+  mobileMq.addEventListener("change", update)
+
+  return () => {
+    desktopMq.removeEventListener("change", update)
+    mobileMq.removeEventListener("change", update)
+  }
+}, [])
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -43,9 +59,10 @@ export function HeroPhone() {
       {/* Soft light glows (static, no blend mode - blend compositing behind the
           rotating ring is a major cause of jank on mobile) */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute -top-24 -left-24 w-[28rem] h-[28rem] bg-white/15 rounded-full blur-3xl" />
-        <div className="absolute -bottom-16 -right-16 w-[26rem] h-[26rem] bg-cyan-300/20 rounded-full blur-3xl" />
-      </div>
+  <div className="absolute -top-16 -left-16 h-72 w-72 rounded-full bg-white/10 blur-2xl lg:-top-24 lg:-left-24 lg:h-[28rem] lg:w-[28rem] lg:bg-white/15 lg:blur-3xl" />
+
+  <div className="absolute -bottom-10 -right-10 h-64 w-64 rounded-full bg-cyan-300/15 blur-2xl lg:-bottom-16 lg:-right-16 lg:h-[26rem] lg:w-[26rem] lg:bg-cyan-300/20 lg:blur-3xl" />
+</div>
 
       {/* Oversized thin wordmark background */}
       <motion.div
@@ -142,8 +159,8 @@ export function HeroPhone() {
             className="order-1 lg:order-2 relative h-[320px] sm:h-[420px] lg:h-[560px]"
           >
             <div className="scale-[0.66] sm:scale-[0.82] lg:scale-100 h-full w-full">
-              <PhotoRing />
-            </div>
+            <PhotoRing isMobile={isMobile} />
+          </div>
           </motion.div>
         </div>
       </div>
@@ -166,44 +183,71 @@ export function HeroPhone() {
 }
 
 const ringPhotos = [
-  "/hero/team-meeting.webp",
-  "/hero/designer.webp",
-  "/hero/office.webp",
-  "/hero/laptop-work.webp",
-  "/hero/meeting-2.webp",
-  "/hero/handshake.webp",
+  "/hero/google.webp",
+  "/hero/yahoo.webp",
+  "/hero/instagram.webp",
+  "/hero/facebook.webp",
+  "/hero/tiktok.webp",
 ]
 
-function PhotoRing() {
+type PhotoRingProps = {
+  isMobile: boolean
+}
+
+function PhotoRing({ isMobile }: PhotoRingProps) {
   const count = ringPhotos.length
-  const radius = 300
+
+  // SPでは奥行きと画像サイズを小さくしてGPU負荷を軽減
+  const radius = isMobile ? 210 : 300
+  const photoSize = isMobile ? 112 : 150
+
+  const phoneWidth = isMobile ? 176 : 208
+  const phoneHeight = isMobile ? 358 : 424
 
   return (
-    <div className="photo-ring-scene relative h-full w-full flex items-center justify-center">
-      {/* Shared 3D space so the phone and photos depth-sort together */}
+    <div className="photo-ring-scene relative flex h-full w-full items-center justify-center">
       <div className="ring-space relative">
         {/* Orbiting photo ring */}
-        <div className="photo-ring">
+        <div
+          className="photo-ring"
+          style={{
+            willChange: "transform",
+            transform: "translateZ(0)",
+          }}
+        >
           {ringPhotos.map((src, i) => {
             const angle = (360 / count) * i
+
             return (
               <div
                 key={src}
                 className="photo-ring-item"
-                style={{ transform: `rotateY(${angle}deg) translateZ(${radius}px)` }}
+                style={{
+                  transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
+                  willChange: "transform",
+                }}
               >
                 <div
-                  className="photo-ring-face overflow-hidden rounded-xl shadow-lg shadow-blue-950/30 ring-1 ring-white/25"
-                  style={{ width: 168, height: 224, marginLeft: -84, marginTop: -112 }}
+                  className={`photo-ring-face overflow-hidden rounded-full ${
+                    isMobile
+                      ? "shadow-md shadow-blue-950/20"
+                      : "shadow-xl shadow-blue-950/30"
+                  }`}
+                  style={{
+                    width: photoSize,
+                    height: photoSize,
+                    marginLeft: -(photoSize / 2),
+                    marginTop: -(photoSize / 2),
+                  }}
                 >
                   <img
                     src={src || "/placeholder.svg"}
                     alt=""
-                    width={168}
-                    height={224}
+                    width={photoSize}
+                    height={photoSize}
                     decoding="async"
                     draggable={false}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
               </div>
@@ -211,21 +255,61 @@ function PhotoRing() {
           })}
         </div>
 
-        {/* Center tilted phone (static 3D transform; float runs via CSS on the
-            compositor so it stays smooth on mobile) */}
+        {/* Center phone */}
         <div
-          style={{ transform: "rotateZ(-10deg) rotateY(-12deg) translateZ(0)" }}
-          className="phone-center absolute top-1/2 left-1/2 -ml-[104px] -mt-[212px] w-[208px] h-[424px]"
+          style={{
+            width: phoneWidth,
+            height: phoneHeight,
+            marginLeft: -(phoneWidth / 2),
+            marginTop: -(phoneHeight / 2),
+            transform: isMobile
+              ? "rotateZ(-7deg) rotateY(-8deg) translateZ(0)"
+              : "rotateZ(-10deg) rotateY(-12deg) translateZ(0)",
+            willChange: "transform",
+          }}
+          className="phone-center absolute left-1/2 top-1/2"
         >
-          <div className="phone-float h-full w-full rounded-[2.6rem] bg-slate-950 p-2.5 shadow-2xl shadow-blue-950/50 ring-1 ring-white/20">
-            {/* notch */}
-            <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-20 h-6 rounded-b-2xl bg-slate-950 z-10" />
-            <div className="relative h-full w-full overflow-hidden rounded-[2rem] bg-gradient-to-b from-blue-600 to-blue-800 flex flex-col items-center justify-center">
-              <div className="w-20 h-20 rounded-3xl bg-white/95 flex items-center justify-center shadow-lg">
-                <span className="font-display text-3xl font-extrabold text-blue-700">W</span>
+          <div
+            className={`phone-float h-full w-full rounded-[2.6rem] bg-slate-950 p-2.5 ring-1 ring-white/20 ${
+              isMobile
+                ? "shadow-lg shadow-blue-950/30"
+                : "shadow-2xl shadow-blue-950/50"
+            }`}
+            style={{
+              willChange: "transform",
+              transform: "translateZ(0)",
+            }}
+          >
+            <div className="absolute left-1/2 top-2.5 z-10 h-6 w-20 -translate-x-1/2 rounded-b-2xl bg-slate-950" />
+
+            <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-[2rem] bg-gradient-to-b from-blue-600 to-blue-800">
+              <div
+                className={`flex items-center justify-center rounded-3xl bg-white/95 ${
+                  isMobile
+                    ? "h-16 w-16 shadow-md"
+                    : "h-20 w-20 shadow-lg"
+                }`}
+              >
+                <span
+                  className={`font-display font-extrabold text-blue-700 ${
+                    isMobile ? "text-2xl" : "text-3xl"
+                  }`}
+                >
+                  W
+                </span>
               </div>
-              <span className="mt-5 font-display text-base font-medium text-white/90 tracking-wide">Web Design</span>
-              <span className="text-xs text-white/60 tracking-widest">KAGOSHIMA</span>
+
+              <span
+                className={`font-display font-medium tracking-wide text-white/90 ${
+                  isMobile ? "mt-4 text-sm" : "mt-5 text-base"
+                }`}
+              >
+                Web Design
+              </span>
+
+              <span className="text-xs tracking-widest text-white/60">
+                KAGOSHIMA
+              </span>
             </div>
           </div>
         </div>

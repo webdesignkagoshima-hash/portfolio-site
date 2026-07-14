@@ -9,10 +9,20 @@ interface ServiceCardProps {
   title: string
   description: string
   items: string[]
+  price: string
+  note?: string
   index?: number
 }
 
-export function ServiceCard({ icon: Icon, title, description, items, index = 0 }: ServiceCardProps) {
+export function ServiceCard({
+  icon: Icon,
+  title,
+  description,
+  items,
+  price,
+  note,
+  index = 0,
+}: ServiceCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -38,6 +48,21 @@ export function ServiceCard({ icon: Icon, title, description, items, index = 0 }
             </li>
           ))}
         </ul>
+        <div className="mt-6 border-t border-slate-200 pt-5">
+  <p className="text-xs uppercase tracking-widest text-slate-400">
+    PRICE
+  </p>
+
+  <p className="mt-2 text-sm">
+    {price}
+  </p>
+
+  {note && (
+    <p className="mt-2 text-xs leading-loose text-slate-500">
+      {note}
+    </p>
+  )}
+</div>
       </div>
     </motion.div>
   )

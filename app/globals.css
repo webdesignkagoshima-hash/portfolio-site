@@ -210,3 +210,29 @@
 .animate-blob {
   animation: blob 7s infinite;
 }
+
+.photo-ring,
+.phone-float {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.photo-ring-item,
+.photo-ring-face {
+  backface-visibility: hidden;
+}
+
+@media (max-width: 767px) {
+  .photo-ring {
+    animation-duration: 32s !important;
+  }
+
+  .phone-float {
+    animation-duration: 6s !important;
+  }
+
+  .photo-ring-face {
+    filter: none !important;
+  }
+}

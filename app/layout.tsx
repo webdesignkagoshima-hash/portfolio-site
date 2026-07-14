@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import { Noto_Sans_JP, Poppins } from "next/font/google"
 import "./globals.css"
 
+import { Toaster } from "@/components/ui/toaster"
+
 const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
@@ -30,7 +32,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" className={`bg-white ${notoSansJP.variable} ${poppins.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+  {children}
+  <Toaster />
+</body>
     </html>
   )
 }
