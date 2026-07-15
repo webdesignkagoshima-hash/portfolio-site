@@ -121,8 +121,11 @@ const works = [
     description: "キッチン・水回りのリフォーム/マウスピース矯正/精肉通販の広告運用とクリエイティブ制作の実績。",
     role: "構成 / デザイン / WordPress実装",
     image: "/works/work04.png",
-    popupImage: "/works/work04-2.pdf",
-    popupType: "pdf",
+    popupImages: [
+      "/works/work04-2.png",
+      "/works/work04-3.png",
+      "/works/work04-4.png",
+    ],
   },
 ]
 

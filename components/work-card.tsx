@@ -11,8 +11,8 @@ interface WorkCardProps {
   description: string
   role: string
   image: string
-  popupImage: string
-  popupType?: "image" | "pdf"
+  popupImage?: string
+popupImages?: string[]
   index?: number
 }
 
@@ -23,7 +23,7 @@ export function WorkCard({
   role,
   image,
   popupImage,
-  popupType = "image",
+  popupImages,
   index = 0,
 }: WorkCardProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -142,26 +142,22 @@ export function WorkCard({
             <X className="h-6 w-6" />
           </button>
 
-          {popupType === "pdf" ? (
-  <iframe
-    src={`${popupImage}#view=FitH&zoom=page-width`}
-    title={`${title}のPDF`}
-    className="
-      block
-      h-[78dvh]
-      w-[calc(100vw-2rem)]
-      max-w-full
-      bg-white
-      md:h-[90vh]
-      md:w-[90vw]
-      md:max-w-[1600px]
-    "
-  />
+          {popupImages && popupImages.length > 0 ? (
+  <div className="space-y-4">
+    {popupImages.map((src, imageIndex) => (
+      <img
+        key={src}
+        src={src}
+        alt={`${title}の実績画像 ${imageIndex + 1}`}
+        className="block h-auto w-full object-contain"
+      />
+    ))}
+  </div>
 ) : (
   <img
     src={popupImage || image}
     alt={`${title}の拡大画像`}
-    className="-mt-16 block h-auto w-full object-contain"
+    className="block h-auto w-full object-contain"
   />
 )}
         </div>
